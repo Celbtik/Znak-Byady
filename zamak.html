@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="be">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Інтэрактыўная дошка: Замок Альшанскі</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1a252f;
+            color: #ecf0f1;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .top-nav {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .btn:hover { background-color: #2980b9; }
+        .btn-lang { background-color: #e67e22; }
+        .btn-lang:hover { background-color: #d35400; }
+        
+        h1 { text-align: center; color: #f1c40f; }
+        .board {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            max-width: 1000px;
+            margin-top: 10px;
+        }
+        .card {
+            background-color: #2c3e50;
+            border-radius: 10px;
+            padding: 20px;
+            width: 280px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            cursor: pointer;
+            transition: transform 0.2s, background-color 0.2s;
+            border-left: 5px solid #9b59b6;
+        }
+        .card:hover { transform: translateY(-5px); background-color: #34495e; }
+        .card h2 { margin-top: 0; font-size: 1.2em; color: #9b59b6; }
+        .card p { font-size: 0.95em; line-height: 1.4; display: none; margin-bottom: 0; }
+        .card.active p { display: block; animation: fadeIn 0.5s; }
+        .card.active h2 { color: #f1c40f; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .quiz-section {
+            margin-top: 40px;
+            background-color: #1e2b38;
+            padding: 30px;
+            border-radius: 15px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border: 1px solid #34495e;
+        }
+        .quiz-section h2 { text-align: center; color: #f1c40f; margin-top: 0; }
+        .question { font-size: 1.1em; margin-bottom: 15px; font-weight: bold; min-height: 40px; }
+        .options button {
+            display: block; width: 100%; padding: 12px; margin-bottom: 10px;
+            background-color: #3498db; color: white; border: none; border-radius: 5px;
+            font-size: 1em; cursor: pointer; transition: background-color 0.2s;
+        }
+        .options button:hover { background-color: #2980b9; }
+        .options button:disabled { cursor: not-allowed; }
+        .options button.correct { background-color: #2ecc71; }
+        .options button.wrong { background-color: #e74c3c; }
+        #result { text-align: center; font-size: 1.2em; font-weight: bold; margin-top: 20px; color: #2ecc71; }
+        .restart-btn { display: block; margin: 20px auto 0; padding: 10px 20px; background-color: #f1c40f; color: #000; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <a href="index.html" class="btn">🏠 На галоўную</a>
+        <button class="btn btn-lang" onclick="toggleLanguage()">RU / BY</button>
+    </div>
+
+    <h1 data-be="Інтэрактыўная дошка<br>па творы У. Караткевіча 'Замок Альшанскі'" 
+        data-ru="Интерактивная доска<br>по произведению В. Короткевича 'Замок Ольшанский'">
+        Інтэрактыўная дошка<br>па творы У. Караткевіча 'Замок Альшанскі'
+    </h1>
+
+    <div class="board">
+        <div class="card" onclick="toggleCard(this)">
+            <h2 data-be="Галоўны герой: Васіль" data-ru="Главный герой: Василь">Галоўны герой: Васіль</h2>
+            <p data-be="Малады навуковец, які шукае праўду пра мінулае. Сумленны і адданы сваёй справе." 
+               data-ru="Молодой ученый, который ищет правду о прошлом. Честный и преданный своему делу.">
+               Малады навуковец, які шукае праўду пра мінулае. Сумленны і адданы сваёй справе.
+            </p>
+        </div>
+        <div class="card" onclick="toggleCard(this)">
+            <h2 data-be="Замок" data-ru="Замок">Замок</h2>
+            <p data-be="Сімвал гісторыі, таямніц і памяці. Ён захоўвае ў сабе сведчанні мінулых падзей." 
+               data-ru="Символ истории, тайн и памяти. Он хранит в себе свидетельства прошлых событий.">
+               Сімвал гісторыі, таямніц і памяці. Ён захоўвае ў сабе сведчанні мінулых падзей.
+            </p>
+        </div>
+        <div class="card" onclick="toggleCard(this)">
+            <h2 data-be="Тэма барацьбы" data-ru="Тема борьбы">Тэма барацьбы</h2>
+            <p data-be="Барацьба за сваю зямлю, за захаванне гісторыі і культуры продкаў." 
+               data-ru="Борьба за свою землю, за сохранение истории и культуры предков.">
+               Барацьба за сваю зямлю, за захаванне гісторыі і культуры продкаў.
+            </p>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <h2 data-be="Правер свае веды" data-ru="Проверь свои знания">Правер свае веды</h2>
+        <div id="quiz-container">
+            <div class="question" id="question-text">Загрузка...</div>
+            <div class="options" id="options-container"></div>
+            <div id="result"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = 'be';
+
+        function toggleLanguage() {
+            currentLang = currentLang === 'be' ? 'ru' : 'be';
+            document.querySelectorAll('[data-be]').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${currentLang}`);
+            });
+            loadQuestion();
+        }
+
+        function toggleCard(element) {
+            element.classList.toggle('active');
+        }
+
+        const quizData = [
+            {
+                be: { q: "Хто галоўны герой твора?", a: ["Васіль", "Пятро", "Мікалай"], c: 0 },
+                ru: { q: "Кто главный герой произведения?", a: ["Василь", "Петр", "Николай"], c: 0 }
+            },
+            {
+                be: { q: "Што сімвалізуе Замок?", a: ["Багацце", "Гісторыю і памяць", "Вайну"], c: 1 },
+                ru: { q: "Что символизирует Замок?", a: ["Богатство", "Историю и память", "Войну"], c: 1 }
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const resultDiv = document.getElementById('result');
+
+        function loadQuestion() {
+            resultDiv.textContent = "";
+            if (currentQuestion >= quizData.length) {
+                questionText.textContent = currentLang === 'be' ? "Віктарына скончана!" : "Викторина окончена!";
+                optionsContainer.innerHTML = "";
+                resultDiv.textContent = (currentLang === 'be' ? "Ваш вынік: " : "Ваш результат: ") + `${score} / ${quizData.length}`;
+                
+                const restartBtn = document.createElement('button');
+                restartBtn.textContent = currentLang === 'be' ? "Пачаць спачатку" : "Начать сначала";
+                restartBtn.className = "restart-btn";
+                restartBtn.onclick = () => { currentQuestion = 0; score = 0; loadQuestion(); };
+                optionsContainer.appendChild(restartBtn);
+                return;
+            }
+
+            const q = quizData[currentQuestion][currentLang];
+            questionText.textContent = `${currentQuestion + 1}. ${q.q}`;
+            optionsContainer.innerHTML = "";
+
+            q.a.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.textContent = opt;
+                btn.onclick = () => checkAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function checkAnswer(selectedIndex, btnElement) {
+            const correctIndex = quizData[currentQuestion][currentLang].c;
+            const allButtons = optionsContainer.querySelectorAll('button');
+            allButtons.forEach(b => b.disabled = true);
+
+            if (selectedIndex === correctIndex) {
+                btnElement.classList.add('correct');
+                score++;
+            } else {
+                btnElement.classList.add('wrong');
+                allButtons[correctIndex].classList.add('correct');
+            }
+            currentQuestion++;
+            setTimeout(loadQuestion, 1500); 
+        }
+
+        window.onload = loadQuestion;
+    </script>
+</body>
+</html>
