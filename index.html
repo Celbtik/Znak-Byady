@@ -5,75 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Беларуская літаратура - Галоўнае меню</title>
     <style>
+        /* --- ПЕРЕМЕННЫЕ ДЛЯ ТЕМ --- */
+        :root {
+            --bg-base: #0f171e;
+            --bg-gradient: radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.15), transparent 50%),
+                           radial-gradient(circle at 85% 30%, rgba(15, 118, 110, 0.15), transparent 50%);
+            --card-bg: rgba(30, 41, 59, 0.4);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ecf0f1;
+            --text-muted: #94a3b8;
+            --submenu-bg: rgba(255, 255, 255, 0.03);
+            --submenu-hover: rgba(255, 255, 255, 0.1);
+            --header-text: #f1c40f;
+            --glass-blur: blur(16px);
+        }
+
+        body.light-theme {
+            --bg-base: #e2e8f0;
+            --bg-gradient: radial-gradient(circle at 15% 50%, rgba(167, 139, 250, 0.2), transparent 50%),
+                           radial-gradient(circle at 85% 30%, rgba(45, 212, 191, 0.2), transparent 50%);
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --card-border: rgba(255, 255, 255, 0.6);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+            --submenu-bg: rgba(0, 0, 0, 0.03);
+            --submenu-hover: rgba(0, 0, 0, 0.08);
+            --header-text: #1e3a8a;
+        }
+
+        /* --- БАЗОВЫЕ СТИЛИ --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
+        
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(-45deg, #1a252f, #2c3e50, #16222a, #34495e);
-            background-size: 400% 400%;
-            animation: gradientBG 15s ease infinite;
-            color: #ecf0f1;
+            background-color: var(--bg-base);
+            background-image: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
             min-height: 100vh;
             padding: 20px;
-            padding-top: 80px;
+            padding-top: 90px;
             overflow-x: hidden;
+            transition: background-color 0.5s, color 0.5s;
         }
 
-        @keyframes gradientBG {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
+        /* --- ШАПКА --- */
         .header {
             width: 100%;
             max-width: 1000px;
             display: flex;
             justify-content: flex-end;
-            margin-bottom: 20px;
+            gap: 15px;
             position: absolute;
             top: 20px;
             right: 20px;
-        }
-        .btn-lang {
-            padding: 10px 25px;
-            background: rgba(230, 126, 34, 0.8);
-            color: white;
-            border: none;
-            border-radius: 30px;
-            font-weight: bold;
-            font-size: 1em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
             z-index: 10;
         }
-        .btn-lang:hover {
-            background: #e67e22;
+        
+        .btn-control {
+            padding: 10px 20px;
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.95em;
+            cursor: pointer;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .btn-control:hover {
             transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.6);
+            background: var(--submenu-hover);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
         }
 
         h1 {
-            color: #f1c40f;
-            font-size: 3em;
+            color: var(--header-text);
+            font-size: 3.2em;
             margin-bottom: 10px;
-            text-shadow: 0 0 20px rgba(241, 196, 15, 0.5);
             text-align: center;
-            animation: fadeInDown 1s ease-out;
+            text-shadow: 0 0 25px rgba(241, 196, 15, 0.2);
+            animation: fadeInDown 0.8s ease-out;
+            transition: color 0.5s;
         }
         .subtitle {
-            color: #bdc3c7;
+            color: var(--text-muted);
             font-size: 1.2em;
             margin-bottom: 40px;
             text-align: center;
-            animation: fadeInUp 1s ease-out;
+            animation: fadeInUp 0.8s ease-out;
         }
 
+        /* --- СЕТКА КАРТОЧЕК --- */
         .menu-container {
             display: flex;
             gap: 30px;
@@ -81,141 +110,162 @@
             justify-content: center;
             align-items: flex-start;
             max-width: 1000px;
-            animation: fadeIn 1.5s ease-out;
+            animation: fadeIn 1s ease-out;
         }
 
         /* --- СТИЛИ КАРТОЧЕК --- */
         .menu-card {
-            background: rgba(52, 73, 94, 0.8);
-            border-radius: 20px;
+            background: var(--card-bg);
+            border-radius: 24px;
             padding: 30px;
             width: 340px;
-            color: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--card-border);
             display: flex;
             flex-direction: column;
-            backdrop-filter: blur(10px);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, border-color 0.3s ease;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
         .menu-card.zamak { border-top: 4px solid #9b59b6; }
         .menu-card.znak { border-top: 4px solid #e74c3c; }
 
-        .menu-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
+        /* Наведение на карточку - плавное приближение */
+        .menu-card:hover, .menu-card:focus-within {
+            transform: translateY(-5px) scale(1.02);
         }
-        .menu-card.zamak:hover { box-shadow: 0 15px 40px rgba(155, 89, 182, 0.3); }
-        .menu-card.znak:hover { box-shadow: 0 15px 40px rgba(231, 76, 60, 0.3); }
+        .menu-card.zamak:hover, .menu-card.zamak:focus-within {
+            box-shadow: 0 15px 40px rgba(155, 89, 182, 0.25);
+            border-color: rgba(155, 89, 182, 0.4);
+        }
+        .menu-card.znak:hover, .menu-card.znak:focus-within {
+            box-shadow: 0 15px 40px rgba(231, 76, 60, 0.25);
+            border-color: rgba(231, 76, 60, 0.4);
+        }
 
+        /* Заголовки карточек */
         .menu-card h2 {
             margin-bottom: 10px;
-            font-size: 1.6em;
-            transition: color 0.3s;
+            font-size: 1.7em;
             text-align: center;
+            transition: all 0.3s ease;
         }
         .menu-card.zamak h2 { color: #9b59b6; }
         .menu-card.znak h2 { color: #e74c3c; }
 
-        .menu-card:hover h2 {
-            color: #fff;
-            text-shadow: 0 0 10px currentColor;
+        /* Жирный шрифт и свечение заголовка при наведении */
+        .menu-card:hover h2, .menu-card:focus-within h2 {
+            font-weight: 900;
+            color: var(--text-main);
+            text-shadow: 0 0 15px currentColor;
         }
 
         .menu-card p.desc {
             font-size: 0.95em;
-            color: #bdc3c7;
+            color: var(--text-muted);
             text-align: center;
             margin-bottom: 20px;
-            line-height: 1.4;
+            transition: font-weight 0.3s;
         }
+        .menu-card:hover p.desc { font-weight: 600; }
 
-        /* --- ВЫЕЗЖАЮЩЕЕ МЕНЮ (АККОРДЕОН) --- */
+        /* --- ВЫЕЗЖАЮЩЕЕ МЕНЮ --- */
         .submenu {
             max-height: 0;
             opacity: 0;
             overflow: hidden;
-            transition: all 0.4s ease-in-out;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-top: 0;
+            gap: 12px;
         }
 
         .menu-card:hover .submenu, 
-        .menu-card:focus-within .submenu {
+        .menu-card:focus-within .submenu,
+        .menu-card.active-mobile .submenu {
             max-height: 400px;
             opacity: 1;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
-        /* Стили кнопок внутри выезжающего меню */
+        /* Кнопки внутри меню */
         .submenu a {
             text-decoration: none;
-            color: #ecf0f1;
-            background: rgba(255,255,255,0.05);
-            padding: 12px 15px;
-            border-radius: 10px;
+            color: var(--text-main);
+            background: var(--submenu-bg);
+            padding: 14px 18px;
+            border-radius: 12px;
             font-size: 0.95em;
-            transition: all 0.2s;
+            font-weight: 500;
+            transition: all 0.3s ease;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-left: 3px solid transparent;
+            border-top: 1px solid transparent;
+            border-bottom: 1px solid transparent;
         }
 
+        /* Эффекты для пунктов меню */
         .submenu a:hover {
-            background: rgba(255,255,255,0.15);
-            transform: translateX(5px);
+            background: var(--submenu-hover);
+            font-weight: 800; /* Жирный шрифт */
+            transform: scale(1.03) translateX(5px); /* Приближение */
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .zamak .submenu a:hover {
             border-left-color: #9b59b6;
-            background: rgba(155, 89, 182, 0.2);
+            border-top: 1px solid rgba(155, 89, 182, 0.2);
+            border-bottom: 1px solid rgba(155, 89, 182, 0.2);
         }
         .znak .submenu a:hover {
             border-left-color: #e74c3c;
-            background: rgba(231, 76, 60, 0.2);
+            border-top: 1px solid rgba(231, 76, 60, 0.2);
+            border-bottom: 1px solid rgba(231, 76, 60, 0.2);
         }
 
-        .submenu .icon { font-size: 1.2em; }
+        .submenu .icon { font-size: 1.2em; transition: transform 0.3s; }
+        .submenu a:hover .icon { transform: scale(1.2) rotate(5deg); }
 
-        /* Текст-подсказка "Наведи" */
         .hint {
             text-align: center;
             font-size: 0.85em;
-            color: #7f8c8d;
-            margin-top: 15px;
+            color: var(--text-muted);
+            margin-top: 10px;
             transition: opacity 0.3s;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
         }
-        
-        .menu-card:hover .hint {
-            opacity: 0;
-        }
+        .menu-card:hover .hint, .menu-card:focus-within .hint { opacity: 0; }
 
-        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- АНИМАЦИИ --- */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Адаптивность для телефонов */
+        /* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
         @media (max-width: 768px) {
             h1 { font-size: 2.2em; }
             .menu-card { width: 100%; max-width: 400px; }
+            /* Отключаем ховер на телефонах */
             .menu-card:hover .submenu { max-height: 0; opacity: 0; margin-top: 0; }
-            .menu-card:focus-within .submenu { max-height: 400px; opacity: 1; margin-top: 20px; }
-            .menu-card:focus-within .hint { opacity: 0; }
+            .menu-card:hover .hint { opacity: 1; }
+            /* Включаем открытие по клику */
+            .menu-card.active-mobile .submenu { max-height: 400px; opacity: 1; margin-top: 15px; }
+            .menu-card.active-mobile .hint { opacity: 0; }
         }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <button class="btn-lang" onclick="toggleMainLanguage()">RU / BY</button>
+        <button class="btn-control" onclick="toggleTheme()" id="theme-btn">🌙 Тэма</button>
+        <button class="btn-control" onclick="toggleMainLanguage()">RU / BY</button>
     </div>
 
     <h1 id="main-title" data-be="Беларуская літаратура" data-ru="Белорусская литература">Беларуская літаратура</h1>
@@ -223,7 +273,7 @@
     
     <div class="menu-container">
         
-        <!-- ================= КАРТОЧКА 1: ЗАМАК АЛЬШАНСКІ ================= -->
+        <!-- ================= ЗАМАК АЛЬШАНСКІ ================= -->
         <div class="menu-card zamak" tabindex="0">
             <h2 data-be="Замак Альшанскі" data-ru="Замок Ольшанский">Замак Альшанскі</h2>
             <p class="desc" data-be="Твор Уладзіміра Караткевіча" data-ru="Произведение Владимира Короткевича">Твор Уладзіміра Караткевіча</p>
@@ -250,7 +300,7 @@
             </div>
         </div>
 
-        <!-- ================= КАРТОЧКА 2: ЗНАК БЯДЫ ================= -->
+        <!-- ================= ЗНАК БЯДЫ ================= -->
         <div class="menu-card znak" tabindex="0">
             <h2 data-be="Знак Бяды" data-ru="Знак Беды">Знак Бяды</h2>
             <p class="desc" data-be="Твор Васіля Быкава" data-ru="Произведение Василя Быкова">Твор Васіля Быкава</p>
@@ -280,15 +330,15 @@
     </div>
 
     <script>
+        // --- ЛОГИКА ЯЗЫКА ---
         let currentLang = localStorage.getItem('siteLang') || 'be';
 
         function updateMainText() {
-            // Меняем текст на основе выбранного языка
             document.querySelectorAll('[data-be]').forEach(el => {
                 el.innerHTML = el.getAttribute(`data-${currentLang}`);
             });
 
-            // Передаем язык дальше по ссылкам
+            // Добавляем ?lang=... к ссылкам, чтобы язык передавался дальше
             document.querySelectorAll('.link-item').forEach(link => {
                 let baseUrl = link.getAttribute('href').split('?')[0];
                 link.setAttribute('href', `${baseUrl}?lang=${currentLang}`);
@@ -301,9 +351,55 @@
             updateMainText();
         }
 
+        // --- ЛОГИКА ТЕМЫ ---
+        let currentTheme = localStorage.getItem('siteTheme') || 'dark';
+        const themeBtn = document.getElementById('theme-btn');
+
+        function applyTheme() {
+            if (currentTheme === 'light') {
+                document.body.classList.add('light-theme');
+                if (currentLang === 'be') themeBtn.innerText = '☀️ Тэма';
+                else themeBtn.innerText = '☀️ Тема';
+            } else {
+                document.body.classList.remove('light-theme');
+                if (currentLang === 'be') themeBtn.innerText = '🌙 Тэма';
+                else themeBtn.innerText = '🌙 Тема';
+            }
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('siteTheme', currentTheme);
+            applyTheme();
+        }
+
+        // --- МОБИЛЬНАЯ АДАПТАЦИЯ (КЛИК ВМЕСТО НАВЕДЕНИЯ) ---
+        function setupMobileClick() {
+            if (window.innerWidth <= 768) {
+                document.querySelectorAll('.menu-card').forEach(card => {
+                    card.addEventListener('click', function(e) {
+                        // Если кликнули не по ссылке внутри, открываем/закрываем карточку
+                        if (!e.target.closest('a')) {
+                            this.classList.toggle('active-mobile');
+                        }
+                    });
+                });
+            }
+        }
+
+        // --- ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ ---
         window.onload = function() {
             updateMainText();
+            applyTheme();
+            setupMobileClick();
         };
+        
+        // Обновляем кнопку темы при смене языка
+        const originalToggleLang = toggleMainLanguage;
+        toggleMainLanguage = function() {
+            originalToggleLang();
+            applyTheme(); 
+        }
     </script>
 </body>
 </html>
