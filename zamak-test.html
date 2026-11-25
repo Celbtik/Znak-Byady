@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="be">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тэст: Замак Альшанскі</title>
+    <style>
+        /* --- ПЕРЕМЕННЫЕ ДЛЯ ТЕМ --- */
+        :root {
+            --bg-base: #0f171e;
+            --bg-gradient: radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.15), transparent 50%),
+                           radial-gradient(circle at 85% 30%, rgba(15, 118, 110, 0.15), transparent 50%);
+            --card-bg: rgba(30, 41, 59, 0.6);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ecf0f1;
+            --text-muted: #94a3b8;
+            --glass-blur: blur(16px);
+            --accent: #9b59b6;
+            --accent-light: #c084fc;
+            --correct: #2ecc71;
+            --wrong: #e74c3c;
+        }
+
+        body.light-theme {
+            --bg-base: #e2e8f0;
+            --bg-gradient: radial-gradient(circle at 15% 50%, rgba(167, 139, 250, 0.2), transparent 50%),
+                           radial-gradient(circle at 85% 30%, rgba(45, 212, 191, 0.2), transparent 50%);
+            --card-bg: rgba(255, 255, 255, 0.7);
+            --card-border: rgba(255, 255, 255, 0.6);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+        }
+
+        /* --- БАЗОВЫЕ СТИЛИ --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-base);
+            background-image: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 90px;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        /* --- ШАПКА --- */
+        .header {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 20px;
+            z-index: 10;
+        }
+        .nav-buttons { display: flex; gap: 15px; }
+        .btn-control {
+            padding: 10px 20px;
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.95em;
+            cursor: pointer;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .btn-control:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* --- ОСНОВНОЙ КОНТЕЙНЕР --- */
+        .quiz-container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card-bg);
+            border-radius: 24px;
+            border: 1px solid var(--card-border);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Прогресс-бар */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--accent-light));
+            width: 0%;
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px var(--accent);
+        }
+
+        /* Вопрос */
+        .question-count {
+            font-size: 0.9em;
+            color: var(--accent-light);
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .question-text {
+            font-size: 1.5em;
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.3;
+        }
+
+        /* Варианты ответов */
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .option-btn {
+            padding: 18px 25px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid transparent;
+            border-radius: 15px;
+            color: var(--text-main);
+            font-size: 1.1em;
+            font-weight: 500;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .option-btn:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateX(5px);
+            border-color: var(--accent);
+        }
+        
+        /* Классы для правильных/неправильных ответов */
+        .option-btn.correct {
+            background: rgba(46, 204, 113, 0.2);
+            border-color: var(--correct);
+            box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
+        }
+        .option-btn.wrong {
+            background: rgba(231, 76, 60, 0.2);
+            border-color: var(--wrong);
+            box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
+            animation: shake 0.4s ease;
+        }
+        .option-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px); }
+            50% { transform: translateX(8px); }
+            75% { transform: translateX(-8px); }
+        }
+
+        /* Кнопка "Далее" */
+        .next-btn {
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            display: none;
+            transition: all 0.3s;
+            float: right;
+        }
+        .next-btn:hover {
+            background: var(--accent-light);
+            box-shadow: 0 0 20px var(--accent);
+            transform: scale(1.05);
+        }
+
+        /* --- ЭКРАН РЕЗУЛЬТАТОВ --- */
+        .result-screen {
+            display: none;
+            text-align: center;
+        }
+        .result-screen h2 {
+            font-size: 2.5em;
+            color: var(--accent);
+            margin-bottom: 20px;
+            text-shadow: 0 0 20px rgba(155, 89, 182, 0.4);
+        }
+        .score-display {
+            font-size: 4em;
+            font-weight: 900;
+            color: var(--text-main);
+            margin-bottom: 10px;
+        }
+        .feedback-text {
+            font-size: 1.2em;
+            color: var(--text-muted);
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+        
+        /* Разбор ответов */
+        .review-section {
+            text-align: left;
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .review-item {
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .review-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .review-q {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .review-a {
+            font-size: 0.9em;
+            color: var(--correct);
+        }
+
+        .restart-btn {
+            padding: 15px 40px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .restart-btn:hover {
+            background: var(--accent-light);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--accent);
+        }
+
+        /* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
+        @media (max-width: 768px) {
+            .quiz-container { padding: 25px; }
+            .question-text { font-size: 1.2em; }
+            .option-btn { font-size: 1em; padding: 15px; }
+            .score-display { font-size: 3em; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="index.html" class="btn-control">🏠 На галоўную</a>
+        <div class="nav-buttons">
+            <button class="btn-control" onclick="toggleTheme()">🌙 Тэма</button>
+            <button class="btn-control" onclick="toggleLang()">RU / BY</button>
+        </div>
+    </div>
+
+    <div class="quiz-container">
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+
+        <!-- Экран с вопросами -->
+        <div id="quiz-content">
+            <div class="question-count" id="question-count">Пытанне 1 з 15</div>
+            <div class="question-text" id="question-text">Загрузка пытання...</div>
+            <div class="options-container" id="options-container"></div>
+            <button class="next-btn" id="next-btn" onclick="nextQuestion()">Далей →</button>
+        </div>
+
+        <!-- Экран результатов -->
+        <div class="result-screen" id="result-screen">
+            <h2 data-be="Тэст скончаны!" data-ru="Тест окончен!">Тэст скончаны!</h2>
+            <div class="score-display" id="score-display">0 / 15</div>
+            <div class="feedback-text" id="feedback-text"></div>
+            
+            <div class="review-section">
+                <h3 style="margin-bottom: 15px; color: var(--accent);" data-be="Разбор памылак" data-ru="Разбор ошибок">Разбор памылак</h3>
+                <div id="review-list"></div>
+            </div>
+
+            <button class="restart-btn" onclick="startQuiz()" data-be="Пачаць спачатку" data-ru="Начать сначала">Пачаць спачатку</button>
+        </div>
+    </div>
+
+    <script>
+        // --- ПЕРЕМЕННЫЕ ---
+        let currentLang = localStorage.getItem('siteLang') || 'be';
+        let currentTheme = localStorage.getItem('siteTheme') || 'dark';
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = [];
+        let shuffledQuestions = [];
+
+        // --- БАЗА ПЫТАННЯЎ (15 штук) ---
+        const allQuestions = [
+            // Тип 1: Классические вопросы
+            {
+                type: 'text',
+                be: { q: "У якім годзе адбываюцца асноўныя падзеі рамана?", options: ["1944", "1984", "1920", "2024"], correct: 1 },
+                ru: { q: "В каком году происходят основные события романа?", options: ["1944", "1984", "1920", "2024"], correct: 1 }
+            },
+            {
+                type: 'text',
+                be: { q: "Хто з'яўляецца аўтарам рамана?", options: ["Васіль Быкаў", "Янка Купала", "Уладзімір Караткевіч", "Максім Багдановіч"], correct: 2 },
+                ru: { q: "Кто является автором романа?", options: ["Василь Быков", "Янка Купала", "Владимир Короткевич", "Максим Богданович"], correct: 2 }
+            },
+            {
+                type: 'text',
+                be: { q: "Які жанр гэтага твора?", options: ["Фэнтэзі", "Гістарычны дэтэктыў", "Навуковая фантастыка", "Раман-эпапея"], correct: 1 },
+                ru: { q: "Какой жанр этого произведения?", options: ["Фэнтези", "Исторический детектив", "Научная фантастика", "Роман-эпопея"], correct: 1 }
+            },
+            // Тип 2: Узнай персонажа по описанию
+            {
+                type: 'text',
+                be: { q: "Хто быў палеографам і знаўцам старажытных моў, які пачаў расследаванне?", options: ["Антон Косміч", "Мар'ян Пташынскі", "Адам Хілінскі", "Вітаўт Лыганоўскі"], correct: 0 },
+                ru: { q: "Кто был палеографом и знатоком древних языков, начавшим расследование?", options: ["Антон Космич", "Марьян Пташинский", "Адам Хилинский", "Витовт Лыгановский"], correct: 0 }
+            },
+            {
+                type: 'text',
+                be: { q: "Хто з персонажаў быў псіхіятрам і галоўным антаганістам?", options: ["Антон Косміч", "Мар'ян Пташынскі", "Вітаўт Лыганоўскі", "Адам Хілінскі"], correct: 2 },
+                ru: { q: "Кто из персонажей был психиатром и главным антагонистом?", options: ["Антон Космич", "Марьян Пташинский", "Витовт Лыгановский", "Адам Хилинский"], correct: 2 }
+            },
+            {
+                type: 'text',
+                be: { q: "Хто такі Адам Хілінскі?", options: ["Міліцыянер", "Прадстаўнік органаў бяспекі", "Прывід", "Калекцыянер злачынстваў"], correct: 1 },
+                ru: { q: "Кто такой Адам Хилинский?", options: ["Милиционер", "Представитель органов безопасности", "Призрак", "Коллекционер преступлений"], correct: 1 }
+            },
+            // Тип 3: Чья цитата? (Соединить)
+            {
+                type: 'text',
+                be: { q: "Каму належыць фраза: «Чалавек — гэта гучыць горда»?", options: ["Антону Космічу", "Вітаўту Лыганоўскаму", "Мар'яну Пташынскаму", "Адаму Хілінскаму"], correct: 1 },
+                ru: { q: "Кому принадлежит фраза: «Человек — это звучит гордо»?", options: ["Антону Космичу", "Витовту Лыгановскому", "Марьяну Пташинскому", "Адаму Хилинскому"], correct: 1 }
+            },
+            {
+                type: 'text',
+                be: { q: "Хто сказаў: «Я не баюся нікога, акрамя свайго сумлення»?", options: ["Антон Косміч", "Вітаўт Лыганоўскі", "Мар'ян Пташынскі", "Адам Хілінскі"], correct: 0 },
+                ru: { q: "Кто сказал: «Я не боюсь никого, кроме своей совести»?", options: ["Антон Космич", "Витовт Лыгановский", "Марьян Пташинский", "Адам Хилинский"], correct: 0 }
+            },
+            {
+                type: 'text',
+                be: { q: "Каму належыць думка: «Усе людзі — злыдні, але некаторыя злыдні лепш за іншых»?", options: ["Лыганоўскаму", "Космічу", "Пташынскаму", "Хілінскаму"], correct: 0 },
+                ru: { q: "Кому принадлежит мысль: «Все люди — злодеи, но некоторые злодеи лучше других»?", options: ["Лыгановскому", "Космичу", "Пташинскому", "Хилинскому"], correct: 0 }
+            },
+            // Еще вопросы по сюжету
+            {
+                type: 'text',
+                be: { q: "Што шукалі галоўныя героі ў замку?", options: ["Скарб з золатам", "Старажытныя граматы", "Зброю", "Карту мясцовасці"], correct: 1 },
+                ru: { q: "Что искали главные герои в замке?", options: ["Клад с золотом", "Древние грамоты", "Оружие", "Карту местности"], correct: 1 }
+            },
+            {
+                type: 'text',
+                be: { q: "Якую ролю адыгрывае прывід Ганны-Гардзіславы?", options: ["Дапамагае героям", "Сімвалізуе трагедыю мінулага", "З'яўляецца галоўным злачынцам", "Ахоўвае скарб"], correct: 1 },
+                ru: { q: "Какую роль играет призрак Анны-Гардиславы?", options: ["Помогает героям", "Символизирует трагедию прошлого", "Является главным преступником", "Охраняет клад"], correct: 1 }
+            },
+            {
+                type: 'text',
+                be: { q: "Што здарылася з Мар'янам Пташынскім на пачатку твора?", options: ["Ён знік", "Яго забілі", "Ён з'ехаў у Амерыку", "Ён стаў міліцыянерам"], correct: 1 },
+                ru: { q: "Что случилось с Марьяном Пташинским в начале произведения?", options: ["Он исчез", "Его убили", "Он уехал в Америку", "Он стал милиционером"], correct: 1 }
+            },
+            {
+                type: 'text',
+                be: { q: "Хто дапамог Космічу ў расследаванні?", options: ["Мясцовыя жыхары", "Адам Хілінскі", "Толькі ён сам", "Прывід Ганны"], correct: 1 },
+                ru: { q: "Кто помог Космичу в расследовании?", options: ["Местные жители", "Адам Хилинский", "Только он сам", "Призрак Анны"], correct: 1 }
+            },
+            {
+                type: 'text',
+                be: { q: "Якая галоўная думка рамана?", options: ["Гісторыя нічога не значыць", "Барацьба за спадчыну і памяць продкаў", "Прывід існуюць", "Грошы — галоўнае ў жыцці"], correct: 1 },
+                ru: { q: "Какая главная мысль романа?", options: ["История ничего не значит", "Борьба за наследие и память предков", "Призраки существуют", "Деньги — главное в жизни"], correct: 1 }
+            },
+            {
+                type: 'text',
+                be: { q: "Дзе адбываюцца падзеі ў асноўным?", options: ["У Мінску", "У замку ў Альшанах", "У Маскве", "У Парыжы"], correct: 1 },
+                ru: { q: "Где происходят события в основном?", options: ["В Минске", "В замке в Ольшанах", "В Москве", "В Париже"], correct: 1 }
+            }
+        ];
+
+        // --- ИНИЦИАЛИЗАЦИЯ ТЕМЫ И ЯЗЫКА ---
+        function applyTheme() {
+            if (currentTheme === 'light') document.body.classList.add('light-theme');
+            else document.body.classList.remove('light-theme');
+        }
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('siteTheme', currentTheme);
+            applyTheme();
+        }
+        function updateLangUI() {
+            // Обновляем статические элементы (кнопки)
+            document.querySelectorAll('[data-be]').forEach(el => {
+                if(el.id !== 'question-text' && el.id !== 'question-count') {
+                     el.innerHTML = el.getAttribute(`data-${currentLang}`);
+                }
+            });
+            // Если тест уже начат, перезагружаем текущий вопрос на новом языке
+            if(shuffledQuestions.length > 0 && currentQuestionIndex < 15) {
+                renderQuestion();
+            } else if (currentQuestionIndex >= 15) {
+                 showResults();
+            }
+        }
+        function toggleLang() {
+            currentLang = currentLang === 'be' ? 'ru' : 'be';
+            localStorage.setItem('siteLang', currentLang);
+            updateLangUI();
+        }
+
+        // --- ЛОГИКА ТЕСТА ---
+
+        // Функция перемешивания (Fisher-Yates)
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        function startQuiz() {
+            // Перемешиваем вопросы
+            shuffledQuestions = shuffle([...allQuestions]);
+            
+            // Для каждого вопроса перемешиваем варианты ответов (но сохраняем правильный индекс)
+            shuffledQuestions = shuffledQuestions.map(q => {
+                let langData = q[currentLang];
+                let optionsWithIndex = langData.options.map((opt, index) => ({ text: opt, isCorrect: index === langData.correct }));
+                shuffle(optionsWithIndex);
+                
+                let newCorrectIndex = optionsWithIndex.findIndex(o => o.isCorrect);
+                return {
+                    ...q,
+                    shuffledOptions: optionsWithIndex.map(o => o.text),
+                    newCorrect: newCorrectIndex
+                };
+            });
+
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            
+            document.getElementById('result-screen').style.display = 'none';
+            document.getElementById('quiz-content').style.display = 'block';
+            
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = shuffledQuestions[currentQuestionIndex];
+            const langData = q[currentLang];
+            
+            // Обновляем прогресс
+            document.getElementById('progress-bar').style.width = `${(currentQuestionIndex / 15) * 100}%`;
+            
+            // Текст вопроса
+            document.getElementById('question-count').innerText = currentLang === 'be' ? `Пытанне ${currentQuestionIndex + 1} з 15` : `Вопрос ${currentQuestionIndex + 1} из 15`;
+            document.getElementById('question-text').innerText = langData.q;
+            
+            // Варианты ответов
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            q.shuffledOptions.forEach((optText, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = optText;
+                btn.onclick = () => selectAnswer(index, btn);
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('next-btn').style.display = 'none';
+        }
+
+        function selectAnswer(selectedIndex, btnElement) {
+            const q = shuffledQuestions[currentQuestionIndex];
+            const correctIndex = q.newCorrect;
+            const allButtons = document.querySelectorAll('.option-btn');
+            
+            // Блокируем все кнопки
+            allButtons.forEach(b => b.disabled = true);
+            
+            // Записываем ответ пользователя
+            userAnswers.push({
+                q: q[currentLang].q,
+                correct: q.shuffledOptions[correctIndex]
+            });
+
+            if (selectedIndex === correctIndex) {
+                btnElement.classList.add('correct');
+                score++;
+            } else {
+                btnElement.classList.add('wrong');
+                allButtons[correctIndex].classList.add('correct');
+            }
+
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < 15) {
+                renderQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            document.getElementById('quiz-content').style.display = 'none';
+            document.getElementById('result-screen').style.display = 'block';
+            document.getElementById('progress-bar').style.width = '100%';
+
+            document.getElementById('score-display').innerText = `${score} / 15`;
+
+            // Текст обратной связи
+            let feedback = "";
+            if (currentLang === 'be') {
+                if (score <= 5) feedback = "😱 Гэта жах! Тэрмінова перачытай раман, інакш Кароткевіч пакрыўдзіцца!";
+                else if (score <= 8) feedback = "😕 Не вельмі. Табе варта перечытаць твор, каб успомніць дэталі.";
+                else if (score <= 12) feedback = "🙂 Няблага! Ты ведаеш асноўныя моманты, але ёсць недакладнасці.";
+                else if (score <= 14) feedback = "😎 Выдатна! Ты вельмі добра ведаеш раман.";
+                else feedback = "🤯 Ідэальна! Ты сапраўдны знаўца творчасці Караткевіча!";
+            } else {
+                if (score <= 5) feedback = "😱 Это ужас! Срочно перечитай роман, иначе Короткевич обидится!";
+                else if (score <= 8) feedback = "😕 Не очень. Тебе стоит перечитать произведение, чтобы вспомнить детали.";
+                else if (score <= 12) feedback = "🙂 Неплохо! Ты знаешь основные моменты, но есть неточности.";
+                else if (score <= 14) feedback = "😎 Отлично! Ты очень хорошо знаешь роман.";
+                else feedback = "🤯 Идеально! Ты настоящий знаток творчества Короткевича!";
+            }
+            document.getElementById('feedback-text').innerText = feedback;
+
+            // Разбор ответов
+            const reviewList = document.getElementById('review-list');
+            reviewList.innerHTML = '';
+            userAnswers.forEach((ans, i) => {
+                const div = document.createElement('div');
+                div.className = 'review-item';
+                div.innerHTML = `
+                    <div class="review-q">${i + 1}. ${ans.q}</div>
+                    <div class="review-a">✔️ ${ans.correct}</div>
+                `;
+                reviewList.appendChild(div);
+            });
+        }
+
+        // Запуск при загрузке
+        window.onload = function() {
+            applyTheme();
+            updateLangUI();
+            startQuiz();
+        };
+    </script>
+</body>
+</html>
