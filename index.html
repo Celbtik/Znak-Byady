@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Беларуская літаратура - Галоўнае меню</title>
     <style>
-        /* Сброс стилей и базовые настройки */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            /* Живой, анимированный градиентный фон */
             background: linear-gradient(-45deg, #1a252f, #2c3e50, #16222a, #34495e);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -17,26 +15,28 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
             padding: 20px;
+            padding-top: 80px;
             overflow-x: hidden;
         }
 
-        /* Анимация переливания фона */
         @keyframes gradientBG {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* Шапка с кнопкой языка */
         .header {
             width: 100%;
             max-width: 1000px;
             display: flex;
             justify-content: flex-end;
             margin-bottom: 20px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
         }
         .btn-lang {
             padding: 10px 25px;
@@ -50,6 +50,7 @@
             transition: all 0.3s ease;
             backdrop-filter: blur(5px);
             box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+            z-index: 10;
         }
         .btn-lang:hover {
             background: #e67e22;
@@ -57,11 +58,10 @@
             box-shadow: 0 6px 20px rgba(230, 126, 34, 0.6);
         }
 
-        /* Заголовки с эффектом свечения */
         h1 {
             color: #f1c40f;
             font-size: 3em;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             text-shadow: 0 0 20px rgba(241, 196, 15, 0.5);
             text-align: center;
             animation: fadeInDown 1s ease-out;
@@ -69,67 +69,53 @@
         .subtitle {
             color: #bdc3c7;
             font-size: 1.2em;
-            margin-bottom: 50px;
+            margin-bottom: 40px;
             text-align: center;
             animation: fadeInUp 1s ease-out;
         }
 
-        /* Сетка для карточек */
         .menu-container {
             display: flex;
-            gap: 40px;
+            gap: 30px;
             flex-wrap: wrap;
             justify-content: center;
+            align-items: flex-start;
+            max-width: 1000px;
             animation: fadeIn 1.5s ease-out;
         }
 
-        /* Стили самих карточек */
+        /* --- СТИЛИ КАРТОЧЕК --- */
         .menu-card {
-            background: rgba(52, 73, 94, 0.7);
+            background: rgba(52, 73, 94, 0.8);
             border-radius: 20px;
-            padding: 40px 30px;
-            width: 320px;
-            text-decoration: none;
+            padding: 30px;
+            width: 340px;
             color: white;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
             backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Эффект блика при наведении */
-        .menu-card::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent);
-            transform: translateX(-100%);
-            transition: 0.5s;
-        }
-        .menu-card:hover::before {
-            transform: translateX(100%);
-        }
+        .menu-card.zamak { border-top: 4px solid #9b59b6; }
+        .menu-card.znak { border-top: 4px solid #e74c3c; }
 
-        /* Индивидуальные цвета для карточек при наведении */
-        .menu-card.zamak:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(155, 89, 182, 0.4);
-            border-color: #9b59b6;
+        .menu-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.7);
         }
-        .menu-card.znak:hover {
-            transform: translateY(-15px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(231, 76, 60, 0.4);
-            border-color: #e74c3c;
-        }
+        .menu-card.zamak:hover { box-shadow: 0 15px 40px rgba(155, 89, 182, 0.3); }
+        .menu-card.znak:hover { box-shadow: 0 15px 40px rgba(231, 76, 60, 0.3); }
 
         .menu-card h2 {
-            margin-bottom: 15px;
-            font-size: 1.8em;
+            margin-bottom: 10px;
+            font-size: 1.6em;
             transition: color 0.3s;
+            text-align: center;
         }
         .menu-card.zamak h2 { color: #9b59b6; }
         .menu-card.znak h2 { color: #e74c3c; }
@@ -139,39 +125,91 @@
             text-shadow: 0 0 10px currentColor;
         }
 
-        .menu-card p {
-            font-size: 1em;
+        .menu-card p.desc {
+            font-size: 0.95em;
             color: #bdc3c7;
-            line-height: 1.5;
-            margin-bottom: 30px;
-            flex-grow: 1;
+            text-align: center;
+            margin-bottom: 20px;
+            line-height: 1.4;
         }
 
-        /* Кнопка внутри карточки */
-        .card-btn {
-            display: inline-block;
-            padding: 12px 25px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.3);
-            border-radius: 30px;
-            font-weight: bold;
+        /* --- ВЫЕЗЖАЮЩЕЕ МЕНЮ (АККОРДЕОН) --- */
+        .submenu {
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.4s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 0;
+        }
+
+        .menu-card:hover .submenu, 
+        .menu-card:focus-within .submenu {
+            max-height: 400px;
+            opacity: 1;
+            margin-top: 20px;
+        }
+
+        /* Стили кнопок внутри выезжающего меню */
+        .submenu a {
+            text-decoration: none;
+            color: #ecf0f1;
+            background: rgba(255,255,255,0.05);
+            padding: 12px 15px;
+            border-radius: 10px;
+            font-size: 0.95em;
+            transition: all 0.2s;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid transparent;
+        }
+
+        .submenu a:hover {
+            background: rgba(255,255,255,0.15);
+            transform: translateX(5px);
+        }
+
+        .zamak .submenu a:hover {
+            border-left-color: #9b59b6;
+            background: rgba(155, 89, 182, 0.2);
+        }
+        .znak .submenu a:hover {
+            border-left-color: #e74c3c;
+            background: rgba(231, 76, 60, 0.2);
+        }
+
+        .submenu .icon { font-size: 1.2em; }
+
+        /* Текст-подсказка "Наведи" */
+        .hint {
+            text-align: center;
+            font-size: 0.85em;
+            color: #7f8c8d;
+            margin-top: 15px;
+            transition: opacity 0.3s;
             text-transform: uppercase;
-            font-size: 0.9em;
             letter-spacing: 1px;
-            transition: all 0.3s;
-            align-self: flex-start;
         }
-        .menu-card.zamak:hover .card-btn {
-            background: #9b59b6; border-color: #9b59b6; box-shadow: 0 0 15px #9b59b6;
-        }
-        .menu-card.znak:hover .card-btn {
-            background: #e74c3c; border-color: #e74c3c; box-shadow: 0 0 15px #e74c3c;
+        
+        .menu-card:hover .hint {
+            opacity: 0;
         }
 
-        /* Анимации появления элементов */
         @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Адаптивность для телефонов */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2em; }
+            .menu-card { width: 100%; max-width: 400px; }
+            .menu-card:hover .submenu { max-height: 0; opacity: 0; margin-top: 0; }
+            .menu-card:focus-within .submenu { max-height: 400px; opacity: 1; margin-top: 20px; }
+            .menu-card:focus-within .hint { opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -181,34 +219,79 @@
     </div>
 
     <h1 id="main-title" data-be="Беларуская літаратура" data-ru="Белорусская литература">Беларуская літаратура</h1>
-    <p class="subtitle" id="main-subtitle" data-be="Інтэрактыўныя дошкі і тэсты" data-ru="Интерактивные доски и тесты">Інтэрактыўныя дошкі і тэсты</p>
+    <p class="subtitle" id="main-subtitle" data-be="Абери твор для вывучэння" data-ru="Выбери произведение для изучения">Абери твор для вывучэння</p>
     
     <div class="menu-container">
-        <!-- Карточка Замак Альшанскі (ВЫПРАВЛЕНА) -->
-        <a href="zamak.html" class="menu-card zamak">
-            <h2 id="zamak-title" data-be="Замак Альшанскі" data-ru="Замок Ольшанский">Замак Альшанскі</h2>
-            <p id="zamak-desc" data-be="Інтэрактыўная дошка па творы Уладзіміра Караткевіча. Гісторыя, таямніцы і віктарына." data-ru="Интерактивная доска по произведению Владимира Короткевича. История, тайны и викторина.">
-                Інтэрактыўная дошка па творы Уладзіміра Караткевіча. Гісторыя, таямніцы і віктарына.
-            </p>
-            <span class="card-btn" id="zamak-btn" data-be="Адкрыць" data-ru="Открыть">Адкрыць</span>
-        </a>
+        
+        <!-- ================= КАРТОЧКА 1: ЗАМАК АЛЬШАНСКІ ================= -->
+        <div class="menu-card zamak" tabindex="0">
+            <h2 data-be="Замак Альшанскі" data-ru="Замок Ольшанский">Замак Альшанскі</h2>
+            <p class="desc" data-be="Твор Уладзіміра Караткевіча" data-ru="Произведение Владимира Короткевича">Твор Уладзіміра Караткевіча</p>
+            
+            <div class="hint" data-be="Навядзі, каб адкрыць" data-ru="Наведи, чтобы открыть">Навядзі, каб адкрыць</div>
+            
+            <div class="submenu">
+                <a href="zamak-personazhy.html" class="link-item">
+                    <span data-be="Персанажы" data-ru="Персонажи">Персанажы</span>
+                    <span class="icon">👥</span>
+                </a>
+                <a href="zamak-fakty.html" class="link-item">
+                    <span data-be="Факты пра пісьменніка і твор" data-ru="Факты о писателе и произведении">Факты пра пісьменніка і твор</span>
+                    <span class="icon">📖</span>
+                </a>
+                <a href="zamak-kratka.html" class="link-item">
+                    <span data-be="Кароткі змест + Відэа" data-ru="Краткое содержание + Видео">Кароткі змест + Відэа</span>
+                    <span class="icon">🎬</span>
+                </a>
+                <a href="zamak-test.html" class="link-item">
+                    <span data-be="Тэст (15 пытанняў)" data-ru="Тест (15 вопросов)">Тэст (15 пытанняў)</span>
+                    <span class="icon">🧠</span>
+                </a>
+            </div>
+        </div>
 
-        <!-- Карточка Знак Бяды (ВЫПРАВЛЕНА) -->
-        <a href="znak.html" class="menu-card znak">
-            <h2 id="znak-title" data-be="Знак Бяды" data-ru="Знак Беды">Знак Бяды</h2>
-            <p id="znak-desc" data-be="Інтэрактыўная дошка па творы Васіля Быкава. Персанажы, сімвалы і праверка ведаў." data-ru="Интерактивная доска по произведению Василя Быкова. Персонажи, символы и проверка знаний.">
-                Інтэрактыўная дошка па творы Васіля Быкава. Персанажы, сімвалы і праверка ведаў.
-            </p>
-            <span class="card-btn" id="znak-btn" data-be="Адкрыць" data-ru="Открыть">Адкрыць</span>
-        </a>
+        <!-- ================= КАРТОЧКА 2: ЗНАК БЯДЫ ================= -->
+        <div class="menu-card znak" tabindex="0">
+            <h2 data-be="Знак Бяды" data-ru="Знак Беды">Знак Бяды</h2>
+            <p class="desc" data-be="Твор Васіля Быкава" data-ru="Произведение Василя Быкова">Твор Васіля Быкава</p>
+            
+            <div class="hint" data-be="Навядзі, каб адкрыць" data-ru="Наведи, чтобы открыть">Навядзі, каб адкрыць</div>
+            
+            <div class="submenu">
+                <a href="znak-personazhy.html" class="link-item">
+                    <span data-be="Персанажы" data-ru="Персонажи">Персанажы</span>
+                    <span class="icon">👥</span>
+                </a>
+                <a href="znak-fakty.html" class="link-item">
+                    <span data-be="Факты пра пісьменніка і твор" data-ru="Факты о писателе и произведении">Факты пра пісьменніка і твор</span>
+                    <span class="icon">📖</span>
+                </a>
+                <a href="znak-kratka.html" class="link-item">
+                    <span data-be="Кароткі змест + Відэа" data-ru="Краткое содержание + Видео">Кароткі змест + Відэа</span>
+                    <span class="icon">🎬</span>
+                </a>
+                <a href="znak-test.html" class="link-item">
+                    <span data-be="Тэст (15 пытанняў)" data-ru="Тест (15 вопросов)">Тэст (15 пытанняў)</span>
+                    <span class="icon">🧠</span>
+                </a>
+            </div>
+        </div>
+
     </div>
 
     <script>
         let currentLang = localStorage.getItem('siteLang') || 'be';
 
         function updateMainText() {
+            // Меняем текст на основе выбранного языка
             document.querySelectorAll('[data-be]').forEach(el => {
                 el.innerHTML = el.getAttribute(`data-${currentLang}`);
+            });
+
+            // Передаем язык дальше по ссылкам
+            document.querySelectorAll('.link-item').forEach(link => {
+                let baseUrl = link.getAttribute('href').split('?')[0];
+                link.setAttribute('href', `${baseUrl}?lang=${currentLang}`);
             });
         }
 
