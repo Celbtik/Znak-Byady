@@ -5,73 +5,229 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Беларуская літаратура - Галоўнае меню</title>
     <style>
+        /* Сброс стилей и базовые настройки */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #2c3e50;
+            /* Живой, анимированный градиентный фон */
+            background: linear-gradient(-45deg, #1a252f, #2c3e50, #16222a, #34495e);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
             color: #ecf0f1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
         }
+
+        /* Анимация переливания фона */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Шапка с кнопкой языка */
+        .header {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+        }
+        .btn-lang {
+            padding: 10px 25px;
+            background: rgba(230, 126, 34, 0.8);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+        }
+        .btn-lang:hover {
+            background: #e67e22;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(230, 126, 34, 0.6);
+        }
+
+        /* Заголовки с эффектом свечения */
         h1 {
             color: #f1c40f;
-            font-size: 2.5em;
-            margin-bottom: 40px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 3em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(241, 196, 15, 0.5);
+            text-align: center;
+            animation: fadeInDown 1s ease-out;
         }
+        .subtitle {
+            color: #bdc3c7;
+            font-size: 1.2em;
+            margin-bottom: 50px;
+            text-align: center;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        /* Сетка для карточек */
         .menu-container {
             display: flex;
-            gap: 30px;
+            gap: 40px;
             flex-wrap: wrap;
             justify-content: center;
+            animation: fadeIn 1.5s ease-out;
         }
+
+        /* Стили самих карточек */
         .menu-card {
-            background-color: #34495e;
-            border-radius: 15px;
-            padding: 30px;
-            width: 250px;
+            background: rgba(52, 73, 94, 0.7);
+            border-radius: 20px;
+            padding: 40px 30px;
+            width: 320px;
             text-decoration: none;
             color: white;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-            transition: transform 0.3s, background-color 0.3s;
-            border-bottom: 5px solid #3498db;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
         }
-        .menu-card:hover {
-            transform: translateY(-10px);
-            background-color: #3d566e;
-            border-bottom: 5px solid #f1c40f;
+
+        /* Эффект блика при наведении */
+        .menu-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.15), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
         }
+        .menu-card:hover::before {
+            transform: translateX(100%);
+        }
+
+        /* Индивидуальные цвета для карточек при наведении */
+        .menu-card.zamak:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(155, 89, 182, 0.4);
+            border-color: #9b59b6;
+        }
+        .menu-card.znak:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(231, 76, 60, 0.4);
+            border-color: #e74c3c;
+        }
+
         .menu-card h2 {
-            margin-top: 0;
-            color: #3498db;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+            transition: color 0.3s;
         }
+        .menu-card.zamak h2 { color: #9b59b6; }
+        .menu-card.znak h2 { color: #e74c3c; }
+
+        .menu-card:hover h2 {
+            color: #fff;
+            text-shadow: 0 0 10px currentColor;
+        }
+
         .menu-card p {
-            font-size: 0.9em;
+            font-size: 1em;
             color: #bdc3c7;
+            line-height: 1.5;
+            margin-bottom: 30px;
+            flex-grow: 1;
         }
+
+        /* Кнопка внутри карточки */
+        .card-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 30px;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            align-self: flex-start;
+        }
+        .menu-card.zamak:hover .card-btn {
+            background: #9b59b6; border-color: #9b59b6; box-shadow: 0 0 15px #9b59b6;
+        }
+        .menu-card.znak:hover .card-btn {
+            background: #e74c3c; border-color: #e74c3c; box-shadow: 0 0 15px #e74c3c;
+        }
+
+        /* Анимации появления элементов */
+        @keyframes fadeInDown { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <h1>Беларуская літаратура</h1>
+    <div class="header">
+        <button class="btn-lang" onclick="toggleMainLanguage()">RU / BY</button>
+    </div>
+
+    <h1 id="main-title" data-be="Беларуская літаратура" data-ru="Белорусская литература">Беларуская літаратура</h1>
+    <p class="subtitle" id="main-subtitle" data-be="Інтэрактыўныя дошкі і тэсты" data-ru="Интерактивные доски и тесты">Інтэрактыўныя дошкі і тэсты</p>
     
     <div class="menu-container">
-        <!-- Спасылка на Замак Альшанскі -->
-        <a href="zamak.html" class="menu-card">
-            <h2>Замок Альшанскі</h2>
-            <p>Інтэрактыўная дошка па творы Уладзіміра Караткевіча.</p>
+        <!-- Карточка Замок Альшанскі -->
+        <a href="zamak.html" class="menu-card zamak">
+            <h2 id="zamak-title" data-be="Замок Альшанскі" data-ru="Замок Ольшанский">Замок Альшанскі</h2>
+            <p id="zamak-desc" data-be="Інтэрактыўная дошка па творы Уладзіміра Караткевіча. Гісторыя, таямніцы і віктарына." data-ru="Интерактивная доска по произведению Владимира Короткевича. История, тайны и викторина.">
+                Інтэрактыўная дошка па творы Уладзіміра Караткевіча. Гісторыя, таямніцы і віктарына.
+            </p>
+            <span class="card-btn" id="zamak-btn" data-be="Адкрыць" data-ru="Открыть">Адкрыць</span>
         </a>
 
-        <!-- Спасылка на Знак Бяды -->
-        <a href="znak.html" class="menu-card">
-            <h2>Знак Бяды</h2>
-            <p>Інтэрактыўная дошка па творы Васіля Быкава.</p>
+        <!-- Карточка Знак Бяды -->
+        <a href="znak.html" class="menu-card znak">
+            <h2 id="znak-title" data-be="Знак Бяды" data-ru="Знак Беды">Знак Бяды</h2>
+            <p id="znak-desc" data-be="Інтэрактыўная дошка па творы Васіля Быкава. Персанажы, сімвалы і праверка ведаў." data-ru="Интерактивная доска по произведению Василя Быкова. Персонажи, символы и проверка знаний.">
+                Інтэрактыўная дошка па творы Васіля Быкава. Персанажы, сімвалы і праверка ведаў.
+            </p>
+            <span class="card-btn" id="znak-btn" data-be="Адкрыць" data-ru="Открыть">Адкрыць</span>
         </a>
     </div>
 
+    <script>
+        // 1. Проверяем сохраненный язык в браузере. Если нет - ставим 'be'.
+        let currentLang = localStorage.getItem('siteLang') || 'be';
+
+        // 2. Функция обновления текста на странице
+        function updateMainText() {
+            document.querySelectorAll('[data-be]').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${currentLang}`);
+            });
+        }
+
+        // 3. Переключатель языка
+        function toggleMainLanguage() {
+            // Меняем текущий язык
+            currentLang = currentLang === 'be' ? 'ru' : 'be';
+            // Сохраняем выбор в память браузера
+            localStorage.setItem('siteLang', currentLang);
+            // Обновляем текст на экране
+            updateMainText();
+        }
+
+        // 4. При загрузке страницы сразу применяем сохраненный язык
+        window.onload = function() {
+            updateMainText();
+        };
+    </script>
 </body>
 </html>
