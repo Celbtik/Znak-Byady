@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="be">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Персанажы: Замак Альшанскі</title>
+    <style>
+        /* --- ПЕРЕМЕННЫЕ ДЛЯ ТЕМ (скопированы с главной) --- */
+        :root {
+            --bg-base: #0f171e;
+            --bg-gradient: radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.15), transparent 50%),
+                           radial-gradient(circle at 85% 30%, rgba(15, 118, 110, 0.15), transparent 50%);
+            --card-bg: rgba(30, 41, 59, 0.4);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ecf0f1;
+            --text-muted: #94a3b8;
+            --glass-blur: blur(16px);
+            --accent: #9b59b6;
+        }
+
+        body.light-theme {
+            --bg-base: #e2e8f0;
+            --bg-gradient: radial-gradient(circle at 15% 50%, rgba(167, 139, 250, 0.2), transparent 50%),
+                           radial-gradient(circle at 85% 30%, rgba(45, 212, 191, 0.2), transparent 50%);
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --card-border: rgba(255, 255, 255, 0.6);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+        }
+
+        /* --- БАЗОВЫЕ СТИЛИ --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-base);
+            background-image: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 90px;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        /* --- ШАПКА --- */
+        .header {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 20px;
+            z-index: 10;
+        }
+        .nav-buttons { display: flex; gap: 15px; }
+        .btn-control {
+            padding: 10px 20px;
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.95em;
+            cursor: pointer;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .btn-control:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.1);
+        }
+
+        h1 {
+            color: var(--accent);
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-align: center;
+            text-shadow: 0 0 25px rgba(155, 89, 182, 0.3);
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1em;
+            margin-bottom: 50px;
+            text-align: center;
+        }
+
+        /* --- СЕТКА ПЕРСОНАЖЕЙ --- */
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1100px;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        /* --- 3D КАРТОЧКА ПЕРСОНАЖА --- */
+        .character-card {
+            background-color: transparent;
+            perspective: 1000px; /* Для 3D эффекта */
+            height: 380px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        /* Эффект переворота при наведении */
+        .character-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 24px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Лицевая сторона (Имя и Аватарка-заглушка) */
+        .card-front {
+            border-top: 4px solid var(--accent);
+        }
+        .avatar-placeholder {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: rgba(155, 89, 182, 0.2);
+            border: 2px solid var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(155, 89, 182, 0.2);
+        }
+        .character-name {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+        .character-role {
+            font-size: 1em;
+            color: var(--text-muted);
+            margin-top: 10px;
+        }
+
+        /* Обратная сторона (Информация) */
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+            border-top: 4px solid var(--accent);
+            justify-content: flex-start;
+            text-align: left;
+            padding: 25px;
+        }
+        body.light-theme .card-back {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(226, 232, 240, 0.95));
+        }
+        .card-back h3 {
+            color: var(--accent);
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .card-back p {
+            font-size: 0.95em;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        /* --- МОБИЛЬНАЯ АДАПТАЦИЯ (Клик вместо наведения) --- */
+        @media (max-width: 768px) {
+            .character-card:hover .card-inner { transform: none; }
+            .character-card.active .card-inner { transform: rotateY(180deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="index.html" class="btn-control">🏠 На галоўную</a>
+        <div class="nav-buttons">
+            <button class="btn-control" onclick="toggleTheme()">🌙 Тэма</button>
+            <button class="btn-control" onclick="toggleLang()">RU / BY</button>
+        </div>
+    </div>
+
+    <h1 id="page-title" data-be="Персанажы" data-ru="Персонажи">Персанажы</h1>
+    <p class="subtitle" data-be="Замак Альшанскі" data-ru="Замок Ольшанский">Замак Альшанскі</p>
+
+    <div class="characters-grid">
+        
+        <!-- Косміч -->
+        <div class="character-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="avatar-placeholder">А.К.</div>
+                    <div class="character-name" data-be="Антон Косміч" data-ru="Антон Космич">Антон Косміч</div>
+                    <div class="character-role" data-be="Галоўны герой" data-ru="Главный герой">Галоўны герой</div>
+                </div>
+                <div class="card-back">
+                    <h3 data-be="Антон Косміч" data-ru="Антон Космич">Антон Косміч</h3>
+                    <p data-be="Кандыдат гістарычных навук, спецыяліст па Сярэднявеччы, палеограф і пісьменнік-аматар. Менавіта ён знаходзіць зашыфраваны манускрыпт і пачынае ўласнае расследаванне забойства сябра. Выступае ў ролі «следчага» ў гэтым дэтэктыве." data-ru="Кандидат исторических наук, специалист по Средневековью, палеограф и писатель-любитель. Именно он находит зашифрованный манускрипт и начинает собственное расследование убийства друга. Выступает в роли «следчего» в этом детективе.">
+                        Кандыдат гістарычных навук, спецыяліст па Сярэднявеччы, палеограф і пісьменнік-аматар. Менавіта ён знаходзіць зашыфраваны манускрыпт і пачынае ўласнае расследаванне забойства сябра. Выступае ў ролі «следчага» ў гэтым дэтэктыве.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Пташынскі -->
+        <div class="character-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="avatar-placeholder">М.П.</div>
+                    <div class="character-name" data-be="Мар'ян Пташынскі" data-ru="Марьян Пташинский">Мар'ян Пташынскі</div>
+                    <div class="character-role" data-be="Сябар Косміча" data-ru="Друг Космича">Сябар Косміча</div>
+                </div>
+                <div class="card-back">
+                    <h3 data-be="Мар'ян Пташынскі" data-ru="Марьян Пташинский">Мар'ян Пташынскі</h3>
+                    <p data-be="Знаўца архіўнай справы і калекцыянер. Яго смерць падаецца выпадковай, але менавіта яна запускае ўсё расследаванне. Валодаў сакрэтам старой кнігі, якая дапамагла раскрыць таямніцу." data-ru="Знаток архивного дела и коллекционер. Его смерть кажется случайной, но именно она запускает всё расследование. Владел секретом старой книги, которая помогла раскрыть тайну.">
+                        Знаўца архіўнай справы і калекцыянер. Яго смерць падаецца выпадковай, але менавіта яна запускае ўсё расследаванне. Валодаў сакрэтам старой кнігі, якая дапамагла раскрыць таямніцу.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Лыганоўскі -->
+        <div class="character-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="avatar-placeholder">В.Л.</div>
+                    <div class="character-name" data-be="Вітаўт Лыганоўскі" data-ru="Витовт Лыгановский">Вітаўт Лыганоўскі</div>
+                    <div class="character-role" data-be="Галоўны антаганіст" data-ru="Главный антагонист">Галоўны антаганіст</div>
+                </div>
+                <div class="card-back">
+                    <h3 data-be="Вітаўт Лыганоўскі" data-ru="Витовт Лыгановский">Вітаўт Лыганоўскі</h3>
+                    <p data-be="Псіхіятр, апошні з роду Альшанскіх. Разумны, дасціпны і небяспечны злачынец са сваім кодэксам гонару. Шукае старажытныя граматы, каб вярнуць сабе былое багацце і ўладу." data-ru="Психиатр, последний из рода Ольшанских. Умный, остроумный и опасный преступник со своим кодексом чести. Ищет древние грамоты, чтобы вернуть себе былое богатство и власть.">
+                        Псіхіятр, апошні з роду Альшанскіх. Разумны, дасціпны і небяспечны злачынец са сваім кодэксам гонару. Шукае старажытныя граматы, каб вярнуць сабе былое багацце і ўладу.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Хілінскі -->
+        <div class="character-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="avatar-placeholder">А.Х.</div>
+                    <div class="character-name" data-be="Адам Хілінскі" data-ru="Адам Хилинский">Адам Хілінскі</div>
+                    <div class="character-role" data-be="«Абель у адстаўцы»" data-ru="«Абель в отставке»">«Абель у адстаўцы»</div>
+                </div>
+                <div class="card-back">
+                    <h3 data-be="Адам Хілінскі" data-ru="Адам Хилинский">Адам Хілінскі</h3>
+                    <p data-be="Прадстаўнік органаў бяспекі, сусед Косміча. Яго кватэра запоўнена кнігамі па гісторыі права і філасофіі. Разам з Космічам дапамагае разблытаць складаны клубок злачынстваў." data-ru="Представитель органов безопасности, сосед Космича. Его квартира заполнена книгами по истории права и философии. Вместе с Космичем помогает распутать сложный клубок преступлений.">
+                        Прадстаўнік органаў бяспекі, сусед Косміча. Яго кватэра запоўнена кнігамі па гісторыі права і філасофіі. Разам з Космічам дапамагае разблытаць складаны клубок злачынстваў.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- ТЕМА ---
+        let currentTheme = localStorage.getItem('siteTheme') || 'dark';
+        function applyTheme() {
+            if (currentTheme === 'light') document.body.classList.add('light-theme');
+            else document.body.classList.remove('light-theme');
+        }
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('siteTheme', currentTheme);
+            applyTheme();
+        }
+
+        // --- ЯЗЫК ---
+        let currentLang = localStorage.getItem('siteLang') || 'be';
+        function applyLang() {
+            document.querySelectorAll('[data-be]').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${currentLang}`);
+            });
+        }
+        function toggleLang() {
+            currentLang = currentLang === 'be' ? 'ru' : 'be';
+            localStorage.setItem('siteLang', currentLang);
+            applyLang();
+        }
+
+        // Инициализация
+        window.onload = function() {
+            applyTheme();
+            applyLang();
+        };
+    </script>
+</body>
+</html>
