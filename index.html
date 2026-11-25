@@ -184,7 +184,7 @@
     <p class="subtitle" id="main-subtitle" data-be="Інтэрактыўныя дошкі і тэсты" data-ru="Интерактивные доски и тесты">Інтэрактыўныя дошкі і тэсты</p>
     
     <div class="menu-container">
-        <!-- Карточка Замок Альшанскі -->
+        <!-- Карточка Замак Альшанскі (ВЫПРАВЛЕНА) -->
         <a href="zamak.html" class="menu-card zamak">
             <h2 id="zamak-title" data-be="Замак Альшанскі" data-ru="Замок Ольшанский">Замак Альшанскі</h2>
             <p id="zamak-desc" data-be="Інтэрактыўная дошка па творы Уладзіміра Караткевіча. Гісторыя, таямніцы і віктарына." data-ru="Интерактивная доска по произведению Владимира Короткевича. История, тайны и викторина.">
@@ -193,7 +193,7 @@
             <span class="card-btn" id="zamak-btn" data-be="Адкрыць" data-ru="Открыть">Адкрыць</span>
         </a>
 
-        <!-- Карточка Знак Бяды -->
+        <!-- Карточка Знак Бяды (ВЫПРАВЛЕНА) -->
         <a href="znak.html" class="menu-card znak">
             <h2 id="znak-title" data-be="Знак Бяды" data-ru="Знак Беды">Знак Бяды</h2>
             <p id="znak-desc" data-be="Інтэрактыўная дошка па творы Васіля Быкава. Персанажы, сімвалы і праверка ведаў." data-ru="Интерактивная доска по произведению Василя Быкова. Персонажи, символы и проверка знаний.">
@@ -204,27 +204,20 @@
     </div>
 
     <script>
-        // 1. Проверяем сохраненный язык в браузере. Если нет - ставим 'be'.
         let currentLang = localStorage.getItem('siteLang') || 'be';
 
-        // 2. Функция обновления текста на странице
         function updateMainText() {
             document.querySelectorAll('[data-be]').forEach(el => {
                 el.innerHTML = el.getAttribute(`data-${currentLang}`);
             });
         }
 
-        // 3. Переключатель языка
         function toggleMainLanguage() {
-            // Меняем текущий язык
             currentLang = currentLang === 'be' ? 'ru' : 'be';
-            // Сохраняем выбор в память браузера
             localStorage.setItem('siteLang', currentLang);
-            // Обновляем текст на экране
             updateMainText();
         }
 
-        // 4. При загрузке страницы сразу применяем сохраненный язык
         window.onload = function() {
             updateMainText();
         };
