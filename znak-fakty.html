@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="be">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Факты: Знак Бяды</title>
+    <style>
+        /* --- ПЕРЕМЕННЫЕ ДЛЯ ТЕМ --- */
+        :root {
+            --bg-base: #0f171e;
+            --bg-gradient: radial-gradient(circle at 15% 50%, rgba(153, 27, 27, 0.15), transparent 50%),
+                           radial-gradient(circle at 85% 30%, rgba(159, 18, 57, 0.15), transparent 50%);
+            --card-bg: rgba(30, 41, 59, 0.4);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ecf0f1;
+            --text-muted: #94a3b8;
+            --glass-blur: blur(16px);
+            --accent: #e74c3c;
+            --accent-light: #f87171;
+        }
+
+        body.light-theme {
+            --bg-base: #e2e8f0;
+            --bg-gradient: radial-gradient(circle at 15% 50%, rgba(248, 113, 113, 0.2), transparent 50%),
+                           radial-gradient(circle at 85% 30%, rgba(251, 146, 60, 0.2), transparent 50%);
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --card-border: rgba(255, 255, 255, 0.6);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+        }
+
+        /* --- БАЗОВЫЕ СТИЛИ --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-base);
+            background-image: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 90px;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        /* --- ШАПКА --- */
+        .header {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 20px;
+            z-index: 10;
+        }
+        .nav-buttons { display: flex; gap: 15px; }
+        .btn-control {
+            padding: 10px 20px;
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.95em;
+            cursor: pointer;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .btn-control:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.1);
+        }
+
+        h1 {
+            color: var(--accent);
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-align: center;
+            text-shadow: 0 0 25px rgba(231, 76, 60, 0.3);
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        /* --- ЗАГОЛОВКИ СЕКЦИЙ --- */
+        .section-title {
+            width: 100%;
+            max-width: 1100px;
+            font-size: 1.8em;
+            color: var(--text-main);
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+            text-shadow: 0 0 10px rgba(231, 76, 60, 0.3);
+        }
+
+        /* --- БЛОК С ФОТО --- */
+        .photo-gallery {
+            max-width: 1100px;
+            width: 100%;
+            padding: 0 20px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .photo-card {
+            flex: 1;
+            min-width: 250px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent-light);
+            box-shadow: 0 15px 35px rgba(231, 76, 60, 0.3);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: transform 0.5s;
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-caption {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        /* --- СЕТКА ФАКТОВ --- */
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            width: 100%;
+            padding: 0 20px;
+            margin-bottom: 40px;
+        }
+
+        /* --- 3D КАРТОЧКА ФАКТА --- */
+        .fact-card {
+            background-color: transparent;
+            perspective: 1000px;
+            height: 280px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: left;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .fact-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Лицевая сторона факта */
+        .card-front {
+            border-left: 4px solid var(--accent);
+        }
+        .fact-number {
+            font-size: 3em;
+            font-weight: 900;
+            color: rgba(231, 76, 60, 0.2);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .fact-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            z-index: 1;
+        }
+        .fact-short {
+            font-size: 0.95em;
+            color: var(--text-muted);
+            z-index: 1;
+        }
+        .hint-flip {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            font-size: 0.8em;
+            color: var(--accent-light);
+            opacity: 0.6;
+        }
+
+        /* Обратная сторона (Подробности) */
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+            border-left: 4px solid var(--accent-light);
+            justify-content: center;
+        }
+        body.light-theme .card-back {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(226, 232, 240, 0.95));
+        }
+        .card-back p {
+            font-size: 0.9em;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        /* Обложка книги */
+        .book-cover-container {
+            max-width: 1100px;
+            width: 100%;
+            padding: 0 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+        }
+        .book-cover {
+            width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transition: transform 0.5s ease;
+        }
+        .book-cover:hover {
+            transform: translateY(-15px) rotate(2deg);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
+        @media (max-width: 768px) {
+            .fact-card:hover .card-inner { transform: none; }
+            .fact-card.active .card-inner { transform: rotateY(180deg); }
+            h1 { font-size: 2.2em; }
+            .photo-card img { height: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="index.html" class="btn-control">🏠 На галоўную</a>
+        <div class="nav-buttons">
+            <button class="btn-control" onclick="toggleTheme()">🌙 Тэма</button>
+            <button class="btn-control" onclick="toggleLang()">RU / BY</button>
+        </div>
+    </div>
+
+    <h1 id="page-title" data-be="Факты" data-ru="Факты">Факты</h1>
+    <p class="subtitle" data-be="Знак Бяды" data-ru="Знак Беды">Знак Бяды</p>
+
+    <!-- СЕКЦИЯ 1: ПИСАТЕЛЬ -->
+    <div class="section-title" data-be="1. Пра пісьменніка" data-ru="1. О писателе">1. Пра пісьменніка</div>
+    
+    <!-- Галерея фото писателя -->
+    <div class="photo-gallery">
+        <div class="photo-card">
+            <img src="bykau1.jpg" alt="Васіль Быкаў" onerror="this.src='https://via.placeholder.com/300x250/2c3e50/ffffff?text=Photo+1'">
+            <div class="photo-caption" data-be="Васіль Быкаў" data-ru="Василь Быков">Васіль Быкаў</div>
+        </div>
+        <div class="photo-card">
+            <img src="bykau2.jpg" alt="Пісьменнік" onerror="this.src='https://via.placeholder.com/300x250/2c3e50/ffffff?text=Photo+2'">
+            <div class="photo-caption" data-be="Быкаў на фронце" data-ru="Быков на фронте">Быкаў на фронце</div>
+        </div>
+        <div class="photo-card">
+            <img src="bykau3.jpg" alt="Класік" onerror="this.src='https://via.placeholder.com/300x250/2c3e50/ffffff?text=Photo+3'">
+            <div class="photo-caption" data-be="Народны пісьменнік" data-ru="Народный писатель">Народны пісьменнік</div>
+        </div>
+    </div>
+
+    <div class="facts-grid">
+        <!-- Факт 1.1 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">01</div>
+                    <div class="fact-title" data-be="Франтавік" data-ru="Фронтовик">Франтавік</div>
+                    <div class="fact-short" data-be="Кім ён быў на вайне?" data-ru="Кем он был на войне?">Кім ён быў на вайне?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Васіль Быкаў пайшоў на фронт добраахвотнікам у 1942 годзе, калі яму было ўсяго 18 гадоў. Ён прайшоў вайну ў складзе пяхоты і быў двойчы паранены. Гэтыя ўласныя перажыванні ляглі ў аснову ўсіх яго твораў." data-ru="Василь Быков ушел на фронт добровольцем в 1942 году, когда ему было всего 18 лет. Он прошел войну в составе пехоты и был дважды ранен. Эти собственные переживания легли в основу всех его произведений.">
+                        Васіль Быкаў пайшоў на фронт добраахвотнікам у 1942 годзе, калі яму было ўсяго 18 гадоў. Ён прайшоў вайну ў складзе пяхоты і быў двойчы паранены. Гэтыя ўласныя перажыванні ляглі ў аснову ўсіх яго твораў.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 1.2 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">02</div>
+                    <div class="fact-title" data-be="Абвінавачванні" data-ru="Обвинения">Абвінавачванні</div>
+                    <div class="fact-short" data-be="Ці хвалілі яго ўлады?" data-ru="Хвалили ли его власти?">Ці хвалілі яго ўлады?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Творы Быкава часта падвяргаліся жорсткай крытыцы і цэнзуры з боку савецкай улады. Яго абвінавачвалі ў «паклёпе на савецкі народ» і «дэгераізацыі» вайны, бо ён паказваў яе занадта жорсткай і праўдзівай, без ідэалагічных прыкрас." data-ru="Произведения Быкова часто подвергались жесткой критике и цензуре со стороны советской власти. Его обвиняли в «клевете на советский народ» и «дегероизации» войны, так как он показывал ее слишком жестокой и правдивой, без идеологических прикрас.">
+                        Творы Быкава часта падвяргаліся жорсткай крытыцы і цэнзуры з боку савецкай улады. Яго абвінавачвалі ў «паклёпе на савецкі народ» і «дэгераізацыі» вайны, бо ён паказваў яе занадта жорсткай і праўдзівай, без ідэалагічных прыкрас.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 1.3 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">03</div>
+                    <div class="fact-title" data-be="Адукацыя" data-ru="Образование">Адукацыя</div>
+                    <div class="fact-short" data-be="Дзе ён вучыўся?" data-ru="Где он учился?">Дзе ён вучыўся?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Пасля вайны Быкаў скончыў Віцебскае мастацкае вучылішча, а затым і факультэт журналістыкі Беларускага дзяржаўнага ўніверсітэта. Ён мог стаць мастаком, але выбраў літаратуру." data-ru="После войны Быков окончил Витебское художественное училище, а затем и факультет журналистики Белорусского государственного университета. Он мог стать художником, но выбрал литературу.">
+                        Пасля вайны Быкаў скончыў Віцебскае мастацкае вучылішча, а затым і факультэт журналістыкі Беларускага дзяржаўнага ўніверсітэта. Ён мог стаць мастаком, але выбраў літаратуру.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 1.4 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">04</div>
+                    <div class="fact-title" data-be="Гонар і годнасць" data-ru="Честь и достоинство">Гонар і годнасць</div>
+                    <div class="fact-short" data-be="Якая галоўная тэма?" data-ru="Какая главная тема?">Якая галоўная тэма?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Галоўная тэма творчасці Быкава — гэта маральны выбар чалавека ў экстрэмальных умовах. Ён заўсёды ставіў пытанне: як застацца чалавекам, калі вакол смерць і здрада? Яго героі часта паміраюць, але не здраджваюць сваім прынцыпам." data-ru="Главная тема творчества Быкова — это моральный выбор человека в экстремальных условиях. Он всегда ставил вопрос: как остаться человеком, когда вокруг смерть и предательство? Его герои часто умирают, но не изменяют своим принципам.">
+                        Галоўная тэма творчасці Быкава — гэта маральны выбар чалавека ў экстрэмальных умовах. Ён заўсёды ставіў пытанне: як застацца чалавекам, калі вакол смерць і здрада? Яго героі часта паміраюць, але не здраджваюць сваім прынцыпам.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 1.5 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">05</div>
+                    <div class="fact-title" data-be="Народны пісьменнік" data-ru="Народный писатель">Народны пісьменнік</div>
+                    <div class="fact-short" data-be="Якія ўзнагароды?" data-ru="Какие награды?">Якія ўзнагароды?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="У 1980 годзе Васілю Быкаву было прысвоена званне Народнага пісьменніка Беларусі. Ён таксама быў узнагароджаны Дзяржаўнай прэміяй СССР і стаў лаўрэатам шматлікіх міжнародных прэмій." data-ru="В 1980 году Василию Быкову было присвоено звание Народного писателя Беларуси. Он также был награжден Государственной премией СССР и стал лауреатом многочисленных международных премий.">
+                        У 1980 годзе Васілю Быкаву было прысвоена званне Народнага пісьменніка Беларусі. Ён таксама быў узнагароджаны Дзяржаўнай прэміяй СССР і стаў лаўрэатам шматлікіх міжнародных прэмій.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- СЕКЦИЯ 2: ПРОИЗВЕДЕНИЕ -->
+    <div class="section-title" data-be="2. Пра твор" data-ru="2. О произведении">2. Пра твор</div>
+
+    <!-- Обложка книги -->
+    <div class="book-cover-container">
+        <img src="znak-book.jpg" alt="Вокладка кнігі" class="book-cover" onerror="this.src='https://via.placeholder.com/300x400/2c3e50/ffffff?text=Book+Cover'">
+    </div>
+
+    <div class="facts-grid">
+        <!-- Факт 2.1 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">01</div>
+                    <div class="fact-title" data-be="Год напісання" data-ru="Год написания">Год напісання</div>
+                    <div class="fact-short" data-be="Калі быў апублікаваны?" data-ru="Когда был опубликован?">Калі быў апублікаваны?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Раман «Знак бяды» быў упершыню апублікаваны ў 1982 годзе ў часопісе «Полымя». Гэта адна з самых вядомых і значных кніг аўтара пра Вялікую Айчынную вайну." data-ru="Роман «Знак беды» был впервые опубликован в 1982 году в журнале «Пламя». Это одна из самых известных и значимых книг автора о Великой Отечественной войне.">
+                        Раман «Знак бяды» быў упершыню апублікаваны ў 1982 годзе ў часопісе «Полымя». Гэта адна з самых вядомых і значных кніг аўтара пра Вялікую Айчынную вайну.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 2.2 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">02</div>
+                    <div class="fact-title" data-be="Сэнс назвы" data-ru="Смысл названия">Сэнс назвы</div>
+                    <div class="fact-short" data-be="Што азначае сімвал?" data-ru="Что означает символ?">Што азначае сімвал?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Назва твора сімвалічная. «Знак бяды» — гэта не проста папярэджанне, а непазбежнасць трагедыі. Крыж на магіле, разбураная хата, страчаная зямля — усё гэта знакі бяды, якая прыйшла на беларускую зямлю разам з вайной." data-ru="Название произведения символично. «Знак беды» — это не просто предупреждение, а неизбежность трагедии. Крест на могиле, разрушенный дом, потерянная земля — все это знаки беды, которая пришла на белорусскую землю вместе с войной.">
+                        Назва твора сімвалічная. «Знак бяды» — гэта не проста папярэджанне, а непазбежнасць трагедыі. Крыж на магіле, разбураная хата, страчаная зямля — усё гэта знакі бяды, якая прыйшла на беларускую зямлю разам з вайной.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 2.3 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">03</div>
+                    <div class="fact-title" data-be="Месца дзеяння" data-ru="Место действия">Месца дзеяння</div>
+                    <div class="fact-short" data-be="Дзе адбываюцца падзеі?" data-ru="Где происходят события?">Дзе адбываюцца падзеі?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Дзеянне адбываецца ў Заходняй Беларусі падчас фашысцкай акупацыі. Вёска, дзе жывуць галоўныя героі, аказваецца паміж двух агнёў: з аднаго боку — партызаны, з другога — паліцаі і немцы." data-ru="Действие происходит в Западной Беларуси во время фашистской оккупации. Деревня, где живут главные герои, оказывается между двух огней: с одной стороны — партизаны, с другой — полицаи и немцы.">
+                        Дзеянне адбываецца ў Заходняй Беларусі падчас фашисцкай акупацыі. Вёска, дзе жывуць галоўныя героі, аказваецца паміж двух агнёў: з аднаго боку — партызаны, з другога — паліцаі і немцы.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 2.4 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">04</div>
+                    <div class="fact-title" data-be="Галоўны канфлікт" data-ru="Главный конфликт">Галоўны канфлікт</div>
+                    <div class="fact-short" data-be="Паміж кім барацьба?" data-ru="Между кем борьба?">Паміж кім барацьба?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Галоўны канфлікт твора — гэта не проста барацьба з ворагам, а сутыкненне чалавечай годнасці і сляпой жорсткасці. Пятро Ганчар супрацьстаіць не толькі паліцаю Косцю, але і камісару Сысоеву, які патрабуе ад яго здаць зброю, не разумеючы яго становішча." data-ru="Главный конфликт произведения — это не просто борьба с врагом, а столкновение человеческого достоинства и слепой жестокости. Петр Гончар противостоит не только полицаю Косте, но и комиссару Сысоеву, который требует от него сдать оружие, не понимая его положения.">
+                        Галоўны канфлікт твора — гэта не проста барацьба з ворагам, а сутыкненне чалавечай годнасці і сляпой жорсткасці. Пятро Ганчар супрацьстаіць не толькі паліцаю Косцю, але і камісару Сысоеву, які патрабуе ад яго здаць зброю, не разумеючы яго становішча.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 2.5 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">05</div>
+                    <div class="fact-title" data-be="Трагічны фінал" data-ru="Трагический финал">Трагічны фінал</div>
+                    <div class="fact-short" data-be="Чым усё скончылася?" data-ru="Чем всё закончилось?">Чым усё скончылася?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Фінал твора вельмі трагічны: галоўныя героі гінуць, а іх хата згарае. Быкаў паказвае, што вайна не пакідае нічога святога, але нават у смерці героі застаюцца людзьмі. Гэта адметная рыса ўсёй творчасці пісьменніка." data-ru="Финал произведения очень трагичен: главные герои погибают, а их дом сгорает. Быков показывает, что война не оставляет ничего святого, но даже в смерти герои остаются людьми. Это отличительная черта всего творчества писателя.">
+                        Фінал твора вельмі трагічны: галоўныя героі гінуць, а іх хата згарае. Быкаў паказвае, што вайна не пакідае нічога святога, але нават у смерці героі застаюцца людзьмі. Гэта адметная рыса ўсёй творчасці пісьменніка.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 2.6 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">06</div>
+                    <div class="fact-title" data-be="Экранізацыя" data-ru="Экранизация">Экранізацыя</div>
+                    <div class="fact-short" data-be="Ці быў фільм?" data-ru="Был ли фильм?">Ці быў фільм?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="У 1986 годзе па рамане быў зняты двухсерыйны мастацкі фільм «Знак бяды» (рэжысёр Міхаіл Пташук). Галоўныя ролі выканалі вядомыя акцёры, а сам Быкаў станоўча адазваўся пра гэтую экранізацыю." data-ru="В 1986 году по роману был снят двухсерийный художественный фильм «Знак беды» (режиссер Михаил Пташук). Главные роли исполнили известные актеры, а сам Быков положительно отозвался об этой экранизации.">
+                        У 1986 годзе па рамане быў зняты двухсерыйны мастацкі фільм «Знак бяды» (рэжысёр Міхаіл Пташук). Галоўныя ролі выканалі вядомыя акцёры, а сам Быкаў станоўча адазваўся пра гэтую экранізацыю.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- ТЕМА ---
+        let currentTheme = localStorage.getItem('siteTheme') || 'dark';
+        function applyTheme() {
+            if (currentTheme === 'light') document.body.classList.add('light-theme');
+            else document.body.classList.remove('light-theme');
+        }
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('siteTheme', currentTheme);
+            applyTheme();
+        }
+
+        // --- ЯЗЫК ---
+        let currentLang = localStorage.getItem('siteLang') || 'be';
+        function applyLang() {
+            document.querySelectorAll('[data-be]').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${currentLang}`);
+            });
+        }
+        function toggleLang() {
+            currentLang = currentLang === 'be' ? 'ru' : 'be';
+            localStorage.setItem('siteLang', currentLang);
+            applyLang();
+        }
+
+        // Инициализация
+        window.onload = function() {
+            applyTheme();
+            applyLang();
+        };
+    </script>
+</body>
+</html>
