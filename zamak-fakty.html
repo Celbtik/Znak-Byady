@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="be">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Факты: Замак Альшанскі</title>
+    <style>
+        /* --- ПЕРЕМЕННЫЕ ДЛЯ ТЕМ --- */
+        :root {
+            --bg-base: #0f171e;
+            --bg-gradient: radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.15), transparent 50%),
+                           radial-gradient(circle at 85% 30%, rgba(15, 118, 110, 0.15), transparent 50%);
+            --card-bg: rgba(30, 41, 59, 0.4);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-main: #ecf0f1;
+            --text-muted: #94a3b8;
+            --glass-blur: blur(16px);
+            --accent: #9b59b6;
+            --accent-light: #c084fc;
+        }
+
+        body.light-theme {
+            --bg-base: #e2e8f0;
+            --bg-gradient: radial-gradient(circle at 15% 50%, rgba(167, 139, 250, 0.2), transparent 50%),
+                           radial-gradient(circle at 85% 30%, rgba(45, 212, 191, 0.2), transparent 50%);
+            --card-bg: rgba(255, 255, 255, 0.5);
+            --card-border: rgba(255, 255, 255, 0.6);
+            --text-main: #0f172a;
+            --text-muted: #475569;
+        }
+
+        /* --- БАЗОВЫЕ СТИЛИ --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-base);
+            background-image: var(--bg-gradient);
+            background-attachment: fixed;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            padding-top: 90px;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        /* --- ШАПКА --- */
+        .header {
+            width: 100%;
+            max-width: 1100px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0 20px;
+            z-index: 10;
+        }
+        .nav-buttons { display: flex; gap: 15px; }
+        .btn-control {
+            padding: 10px 20px;
+            background: var(--card-bg);
+            color: var(--text-main);
+            border: 1px solid var(--card-border);
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 0.95em;
+            cursor: pointer;
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        .btn-control:hover {
+            transform: scale(1.05);
+            background: rgba(255,255,255,0.1);
+        }
+
+        h1 {
+            color: var(--accent);
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            text-align: center;
+            text-shadow: 0 0 25px rgba(155, 89, 182, 0.3);
+        }
+        .subtitle {
+            color: var(--text-muted);
+            font-size: 1.1em;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        /* --- ЗАГОЛОВКИ СЕКЦИЙ --- */
+        .section-title {
+            width: 100%;
+            max-width: 1100px;
+            font-size: 1.8em;
+            color: var(--text-main);
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--accent);
+            text-shadow: 0 0 10px rgba(155, 89, 182, 0.3);
+        }
+
+        /* --- БЛОК С ФОТО --- */
+        .photo-gallery {
+            max-width: 1100px;
+            width: 100%;
+            padding: 0 20px;
+            margin-bottom: 30px;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .photo-card {
+            flex: 1;
+            min-width: 250px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--accent-light);
+            box-shadow: 0 15px 35px rgba(155, 89, 182, 0.3);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: transform 0.5s;
+        }
+
+        .photo-card:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-caption {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        /* --- СЕТКА ФАКТОВ --- */
+        .facts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            max-width: 1100px;
+            width: 100%;
+            padding: 0 20px;
+            margin-bottom: 40px;
+        }
+
+        /* --- 3D КАРТОЧКА ФАКТА --- */
+        .fact-card {
+            background-color: transparent;
+            perspective: 1000px;
+            height: 280px;
+            cursor: pointer;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: left;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .fact-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Лицевая сторона факта */
+        .card-front {
+            border-left: 4px solid var(--accent);
+        }
+        .fact-number {
+            font-size: 3em;
+            font-weight: 900;
+            color: rgba(155, 89, 182, 0.3);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+        .fact-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 10px;
+            z-index: 1;
+        }
+        .fact-short {
+            font-size: 0.95em;
+            color: var(--text-muted);
+            z-index: 1;
+        }
+        .hint-flip {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            font-size: 0.8em;
+            color: var(--accent-light);
+            opacity: 0.6;
+        }
+
+        /* Обратная сторона (Подробности) */
+        .card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+            border-left: 4px solid var(--accent-light);
+            justify-content: center;
+        }
+        body.light-theme .card-back {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(226, 232, 240, 0.95));
+        }
+        .card-back p {
+            font-size: 0.9em;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        /* Обложка книги */
+        .book-cover-container {
+            max-width: 1100px;
+            width: 100%;
+            padding: 0 20px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+        }
+        .book-cover {
+            width: 300px;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            transition: transform 0.5s ease;
+        }
+        .book-cover:hover {
+            transform: translateY(-15px) rotate(2deg);
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
+        @media (max-width: 768px) {
+            .fact-card:hover .card-inner { transform: none; }
+            .fact-card.active .card-inner { transform: rotateY(180deg); }
+            h1 { font-size: 2.2em; }
+            .photo-card img { height: 200px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <a href="index.html" class="btn-control">🏠 На галоўную</a>
+        <div class="nav-buttons">
+            <button class="btn-control" onclick="toggleTheme()">🌙 Тэма</button>
+            <button class="btn-control" onclick="toggleLang()">RU / BY</button>
+        </div>
+    </div>
+
+    <h1 id="page-title" data-be="Факты" data-ru="Факты">Факты</h1>
+    <p class="subtitle" data-be="Замак Альшанскі" data-ru="Замок Ольшанский">Замак Альшанскі</p>
+
+    <!-- СЕКЦИЯ 1: ПИСАТЕЛЬ -->
+    <div class="section-title" data-be="1. Пра пісьменніка" data-ru="1. О писателе">1. Пра пісьменніка</div>
+    
+    <!-- Галерея фото писателя -->
+    <div class="photo-gallery">
+        <div class="photo-card">
+            <img src="writer1.jpg" alt="Уладзімір Караткевіч" onerror="this.src='https://via.placeholder.com/300x250/2c3e50/ffffff?text=Photo+1'">
+            <div class="photo-caption" data-be="Уладзімір Караткевіч" data-ru="Владимир Короткевич">Уладзімір Караткевіч</div>
+        </div>
+        <div class="photo-card">
+            <img src="writer2.jpg" alt="Пісьменнік" onerror="this.src='https://via.placeholder.com/300x250/2c3e50/ffffff?text=Photo+2'">
+            <div class="photo-caption" data-be="Караткевіч падчас працы" data-ru="Короткевич во время работы">Караткевіч падчас працы</div>
+        </div>
+        <div class="photo-card">
+            <img src="writer3.jpg" alt="Класік" onerror="this.src='https://via.placeholder.com/300x250/2c3e50/ffffff?text=Photo+3'">
+            <div class="photo-caption" data-be="Выдатны беларускі пісьменнік" data-ru="Выдающийся белорусский писатель">Выдатны беларускі пісьменнік</div>
+        </div>
+    </div>
+
+    <div class="facts-grid">
+        <!-- Факт 1.1 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">01</div>
+                    <div class="fact-title" data-be="Дзед і легенды" data-ru="Дед и легенды">Дзед і легенды</div>
+                    <div class="fact-short" data-be="Хто прывіў любоў да гісторыі?" data-ru="Кто привил любовь к истории?">Хто прывіў любоў да гісторыі?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Вялікі ўплыў на будучага пісьменніка аказаў яго дзед па маці, Васіль Грынкевіч. Менавіта ад яго Караткевіч упершыню пачуў беларускія народныя легенды і паданні, якія пазней сталі асновай для яго твораў." data-ru="Большое влияние на будущего писателя оказал его дед по матери, Василий Гринкевич. Именно от него Короткевич впервые услышал белорусские народные легенды и предания, которые позже стали основой для его произведений.">
+                        Вялікі ўплыў на будучага пісьменніка аказаў яго дзед па маці, Васіль Грынкевіч. Менавіта ад яго Караткевіч упершыню пачуў беларускія народныя легенды і паданні, якія пазней сталі асновай для яго твораў.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 1.2 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">02</div>
+                    <div class="fact-title" data-be="Першыя вершы" data-ru="Первые стихи">Першыя вершы</div>
+                    <div class="fact-short" data-be="Дзе яны былі надрукаваныя?" data-ru="Где они были напечатаны?">Дзе яны былі надрукаваныя?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Першыя два вершы Уладзіміра Караткевіча былі апублікаваны ў 1951 годзе ў аршанскай раённай газеце «Ленінскі прызыў». Адзін з іх быў прысвечаны Якубу Коласу." data-ru="Первые два стихотворения Владимира Короткевича были опубликованы в 1951 году в оршанской районной газете «Ленинский призыв». Одно из них было посвящено Якубу Коласу.">
+                        Першыя два вершы Уладзіміра Караткевіча былі апублікаваны ў 1951 годзе ў аршанскай раённай газеце «Ленінскі прызыў». Адзін з іх быў прысвечаны Якубу Коласу.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 1.3 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">03</div>
+                    <div class="fact-title" data-be="Мастак і музыка" data-ru="Художник и музыкант">Мастак і музыка</div>
+                    <div class="fact-short" data-be="Якія яшчэ былі таленты?" data-ru="Какие еще были таланты?">Якія яшчэ былі таленты?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Караткевіч быў не толькі пісьменнікам. Ён выдатна маляваў (захавалася больш за 600 яго малюнкаў і накідаў), гуляў на некалькіх музычных інструментах і нават меў абсалютны слых." data-ru="Короткевич был не только писателем. Он отлично рисовал (сохранилось более 600 его рисунков и набросков), играл на нескольких музыкальных инструментах и даже имел абсолютный слух.">
+                        Караткевіч быў не толькі пісьменнікам. Ён выдатна маляваў (захавалася больш за 600 яго малюнкаў і накідаў), гуляў на некалькіх музычных інструментах і нават меў абсалютны слых.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 1.4 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">04</div>
+                    <div class="fact-title" data-be="Адукацыя" data-ru="Образование">Адукацыя</div>
+                    <div class="fact-short" data-be="Дзе вучыўся класік?" data-ru="Где учился классик?">Дзе вучыўся класік?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Ён скончыў філалагічны факультэт Кіеўскага дзяржаўнага ўніверсітэта, а пазней вучыўся на Вышэйшых літаратурных і сцэнарных курсах у Маскве." data-ru="Он окончил филологический факультет Киевского государственного университета, а позже учился на Высших литературных и сценарных курсах в Москве.">
+                        Ён скончыў філалагічны факультэт Кіеўскага дзяржаўнага ўніверсітэта, а пазней вучыўся на Вышэйшых літаратурных і сцэнарных курсах у Маскве.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 1.5 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">05</div>
+                    <div class="fact-title" data-be="Першы дэтэктыў" data-ru="Первый детектив">Першы дэтэктыў</div>
+                    <div class="fact-short" data-be="Хто ўвёў гэты жанр?" data-ru="Кто ввел этот жанр?">Хто ўвёў гэты жанр?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Караткевіч стаў першым беларускім пісьменнікам, які звярнуўся да жанру гістарычнага дэтэктыву. Менавіта ён напісаў «Дзікае паляванне караля Стаха» і «Чорны замак Альшанскі»." data-ru="Короткевич стал первым белорусским писателем, который обратился к жанру исторического детектива. Именно он написал «Дикая охота короля Стаха» и «Черный замок Ольшанский».">
+                        Караткевіч стаў першым беларускім пісьменнікам, які звярнуўся да жанру гістарычнага дэтэктыву. Менавіта ён напісаў «Дзікае паляванне караля Стаха» і «Чорны замак Альшанскі».
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- СЕКЦИЯ 2: ПРОИЗВЕДЕНИЕ -->
+    <div class="section-title" data-be="2. Пра твор" data-ru="2. О произведении">2. Пра твор</div>
+
+    <!-- Обложка книги -->
+    <div class="book-cover-container">
+        <img src="book.jpg" alt="Вокладка кнігі" class="book-cover" onerror="this.src='https://via.placeholder.com/300x400/2c3e50/ffffff?text=Book+Cover'">
+    </div>
+
+    <div class="facts-grid">
+        <!-- Факт 2.1 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">01</div>
+                    <div class="fact-title" data-be="Жанр" data-ru="Жанр">Жанр</div>
+                    <div class="fact-short" data-be="Што гэта за кніга?" data-ru="Что это за книга?">Што гэта за кніга?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Гэта гістарычны дэтэктыў з элементамі містыкі і прыгод. Сам Караткевіч вызначыў яго як «раман-дэтэктыў»." data-ru="Это исторический детектив с элементами мистики и приключений. Сам Короткевич определил его как «роман-детектив».">
+                        Гэта гістарычны дэтэктыў з элементамі містыкі і прыгод. Сам Караткевіч вызначыў яго як «раман-дэтэктыў».
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 2.2 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">02</div>
+                    <div class="fact-title" data-be="Галоўная таямніца" data-ru="Главная тайна">Галоўная таямніца</div>
+                    <div class="fact-short" data-be="Што шукаюць героі?" data-ru="Что ищут герои?">Што шукаюць героі?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="У аснове сюжэта — пошукі старажытных грамат (дакументаў) роду Альшанскіх. За гэтымі паперамі палююць як сучасныя злачынцы, так і прывід мінулага." data-ru="В основе сюжета — поиски древних грамот (документов) рода Ольшанских. За этими бумагами охотятся как современные преступники, так и призрак прошлого.">
+                        У аснове сюжэта — пошукі старажытных грамат (дакументаў) роду Альшанскіх. За гэтымі паперамі палююць як сучасныя злачынцы, так і прывід мінулага.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 2.3 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">03</div>
+                    <div class="fact-title" data-be="Гістарычная аснова" data-ru="Историческая основа">Гістарычная аснова</div>
+                    <div class="fact-short" data-be="Ці былі такія князі?" data-ru="Были ли такие князья?">Ці былі такія князі?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Хоць галоўныя героі выдуманыя, Караткевіч апісвае рэальныя гістарычныя падзеі і мясціны. Замак Альшанскі і род князёў — мастацкі вымысел, але ён цесна пераплецены з сапраўднай гісторыяй ВКЛ." data-ru="Хотя главные герои вымышлены, Короткевич описывает реальные исторические события и места. Замок Ольшанский и род князей — художественный вымысел, но он тесно переплетен с настоящей историей ВКЛ.">
+                        Хоць галоўныя героі выдуманыя, Караткевіч апісвае рэальныя гістарычныя падзеі і мясціны. Замак Альшанскі і род князёў — мастацкі вымысел, але ён цесна пераплецены з сапраўднай гісторыяй ВКЛ.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 2.4 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">04</div>
+                    <div class="fact-title" data-be="Прывід Ганны" data-ru="Призрак Анны">Прывід Ганны</div>
+                    <div class="fact-short" data-be="Хто блукае ў замку?" data-ru="Кто бродит в замке?">Хто блукае ў замку?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Легенда пра замураваную князёўну Ганну-Гардзіславу — адзін з самых паэтычных і жудасных момантаў кнігі. Яе вобраз сімвалізуе трагедыю кахання і жорсткасць улады." data-ru="Легенда о замурованной княжне Анне-Гардиславе — один из самых поэтичных и жутких моментов книги. Ее образ символизирует трагедию любви и жестокость власти.">
+                        Легенда пра замураваную князёўну Ганну-Гардзіславу — адзін з самых паэтычных і жудасных момантаў кнігі. Яе вобраз сімвалізуе трагедыю кахання і жорсткасць улады.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 2.5 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">05</div>
+                    <div class="fact-title" data-be="Экранізацыя" data-ru="Экранизация">Экранізацыя</div>
+                    <div class="fact-short" data-be="Ці быў фільм?" data-ru="Был ли фильм?">Ці быў фільм?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="Па рамане быў зняты савецкі тэлефільм «Чорны замак Альшанскі» ў 1984 годзе (рэжысёр Міхаіл Пташук). Галоўную ролю выканаў Віктар Еўграфаў." data-ru="По роману был снят советский телефильм «Черный замок Ольшанский» в 1984 году (режиссер Михаил Пташук). Главную роль исполнил Виктор Евграфов.">
+                        Па рамане быў зняты савецкі тэлефільм «Чорны замак Альшанскі» ў 1984 годзе (рэжысёр Міхаіл Пташук). Галоўную ролю выканаў Віктар Еўграфаў.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Факт 2.6 -->
+        <div class="fact-card" onclick="this.classList.toggle('active')">
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="fact-number">06</div>
+                    <div class="fact-title" data-be="Сучаснае чытанне" data-ru="Современное прочтение">Сучаснае чытанне</div>
+                    <div class="fact-short" data-be="Чаму гэта актуальна?" data-ru="Почему это актуально?">Чаму гэта актуальна?</div>
+                    <div class="hint-flip" data-be="Навядзі →" data-ru="Наведи →">Навядзі →</div>
+                </div>
+                <div class="card-back">
+                    <p data-be="У 2024 годзе выйшла новая экранізацыя пад назвай «Чорны замак». Яна паказвае, што цікавасць да гэтай гісторыі не згасае і праз дзесяцігоддзі." data-ru="В 2024 году вышла новая экранизация под названием «Черный замок». Она показывает, что интерес к этой истории не угасает и спустя десятилетия.">
+                        У 2024 годзе выйшла новая экранізацыя пад назвай «Чорны замак». Яна паказвае, што цікавасць да гэтай гісторыі не згасае і праз дзесяцігоддзі.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- ТЕМА ---
+        let currentTheme = localStorage.getItem('siteTheme') || 'dark';
+        function applyTheme() {
+            if (currentTheme === 'light') document.body.classList.add('light-theme');
+            else document.body.classList.remove('light-theme');
+        }
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('siteTheme', currentTheme);
+            applyTheme();
+        }
+
+        // --- ЯЗЫК ---
+        let currentLang = localStorage.getItem('siteLang') || 'be';
+        function applyLang() {
+            document.querySelectorAll('[data-be]').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${currentLang}`);
+            });
+        }
+        function toggleLang() {
+            currentLang = currentLang === 'be' ? 'ru' : 'be';
+            localStorage.setItem('siteLang', currentLang);
+            applyLang();
+        }
+
+        // Инициализация
+        window.onload = function() {
+            applyTheme();
+            applyLang();
+        };
+    </script>
+</body>
+</html>
