@@ -20,7 +20,6 @@
             --correct: #2ecc71;
             --wrong: #e74c3c;
         }
-
         body.light-theme {
             --bg-base: #e2e8f0;
             --bg-gradient: radial-gradient(circle at 15% 50%, rgba(248, 113, 113, 0.2), transparent 50%),
@@ -30,8 +29,6 @@
             --text-main: #0f172a;
             --text-muted: #475569;
         }
-
-        /* --- БАЗОВЫЕ СТИЛИ --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -47,8 +44,6 @@
             padding-top: 90px;
             transition: background-color 0.5s, color 0.5s;
         }
-
-        /* --- ШАПКА --- */
         .header {
             width: 100%;
             max-width: 900px;
@@ -77,12 +72,7 @@
             transition: all 0.3s ease;
             text-decoration: none;
         }
-        .btn-control:hover {
-            transform: scale(1.05);
-            background: rgba(255,255,255,0.1);
-        }
-
-        /* --- ОСНОВНОЙ КОНТЕЙНЕР --- */
+        .btn-control:hover { transform: scale(1.05); background: rgba(255,255,255,0.1); }
         .quiz-container {
             width: 100%;
             max-width: 800px;
@@ -96,8 +86,6 @@
             position: relative;
             overflow: hidden;
         }
-
-        /* Прогресс-бар */
         .progress-container {
             width: 100%;
             height: 8px;
@@ -113,8 +101,6 @@
             transition: width 0.4s ease;
             box-shadow: 0 0 10px var(--accent);
         }
-
-        /* Вопрос */
         .question-count {
             font-size: 0.9em;
             color: var(--accent-light);
@@ -129,13 +115,7 @@
             margin-bottom: 30px;
             line-height: 1.3;
         }
-
-        /* Варианты ответов */
-        .options-container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
+        .options-container { display: flex; flex-direction: column; gap: 15px; }
         .option-btn {
             padding: 18px 25px;
             background: rgba(255,255,255,0.05);
@@ -150,13 +130,7 @@
             position: relative;
             overflow: hidden;
         }
-        .option-btn:hover {
-            background: rgba(255,255,255,0.1);
-            transform: translateX(5px);
-            border-color: var(--accent);
-        }
-        
-        /* Классы для правильных/неправильных ответов */
+        .option-btn:hover { background: rgba(255,255,255,0.1); transform: translateX(5px); border-color: var(--accent); }
         .option-btn.correct {
             background: rgba(46, 204, 113, 0.2);
             border-color: var(--correct);
@@ -168,19 +142,13 @@
             box-shadow: 0 0 15px rgba(231, 76, 60, 0.4);
             animation: shake 0.4s ease;
         }
-        .option-btn:disabled {
-            cursor: not-allowed;
-            opacity: 0.8;
-        }
-
+        .option-btn:disabled { cursor: not-allowed; opacity: 0.8; }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
             25% { transform: translateX(-8px); }
             50% { transform: translateX(8px); }
             75% { transform: translateX(-8px); }
         }
-
-        /* Кнопка "Далее" */
         .next-btn {
             margin-top: 30px;
             padding: 15px 30px;
@@ -195,37 +163,11 @@
             transition: all 0.3s;
             float: right;
         }
-        .next-btn:hover {
-            background: var(--accent-light);
-            box-shadow: 0 0 20px var(--accent);
-            transform: scale(1.05);
-        }
-
-        /* --- ЭКРАН РЕЗУЛЬТАТОВ --- */
-        .result-screen {
-            display: none;
-            text-align: center;
-        }
-        .result-screen h2 {
-            font-size: 2.5em;
-            color: var(--accent);
-            margin-bottom: 20px;
-            text-shadow: 0 0 20px rgba(231, 76, 60, 0.4);
-        }
-        .score-display {
-            font-size: 4em;
-            font-weight: 900;
-            color: var(--text-main);
-            margin-bottom: 10px;
-        }
-        .feedback-text {
-            font-size: 1.2em;
-            color: var(--text-muted);
-            margin-bottom: 40px;
-            font-style: italic;
-        }
-        
-        /* Разбор ответов */
+        .next-btn:hover { background: var(--accent-light); box-shadow: 0 0 20px var(--accent); transform: scale(1.05); }
+        .result-screen { display: none; text-align: center; }
+        .result-screen h2 { font-size: 2.5em; color: var(--accent); margin-bottom: 20px; text-shadow: 0 0 20px rgba(231, 76, 60, 0.4); }
+        .score-display { font-size: 4em; font-weight: 900; color: var(--text-main); margin-bottom: 10px; }
+        .feedback-text { font-size: 1.2em; color: var(--text-muted); margin-bottom: 40px; font-style: italic; }
         .review-section {
             text-align: left;
             background: rgba(0,0,0,0.2);
@@ -235,25 +177,10 @@
             max-height: 300px;
             overflow-y: auto;
         }
-        .review-item {
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .review-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-        .review-q {
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .review-a {
-            font-size: 0.9em;
-            color: var(--correct);
-        }
-
+        .review-item { margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .review-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .review-q { font-weight: bold; margin-bottom: 5px; }
+        .review-a { font-size: 0.9em; color: var(--correct); }
         .restart-btn {
             padding: 15px 40px;
             background: var(--accent);
@@ -265,13 +192,7 @@
             cursor: pointer;
             transition: all 0.3s;
         }
-        .restart-btn:hover {
-            background: var(--accent-light);
-            transform: scale(1.05);
-            box-shadow: 0 0 20px var(--accent);
-        }
-
-        /* --- МОБИЛЬНАЯ АДАПТАЦИЯ --- */
+        .restart-btn:hover { background: var(--accent-light); transform: scale(1.05); box-shadow: 0 0 20px var(--accent); }
         @media (max-width: 768px) {
             .quiz-container { padding: 25px; }
             .question-text { font-size: 1.2em; }
@@ -281,7 +202,6 @@
     </style>
 </head>
 <body>
-
     <div class="header">
         <a href="index.html" class="btn-control">🏠 На галоўную</a>
         <div class="nav-buttons">
@@ -289,37 +209,26 @@
             <button class="btn-control" onclick="toggleLang()">RU / BY</button>
         </div>
     </div>
-
     <div class="quiz-container">
-        <div class="progress-container">
-            <div class="progress-bar" id="progress-bar"></div>
-        </div>
-
-        <!-- Экран с вопросами -->
+        <div class="progress-container"><div class="progress-bar" id="progress-bar"></div></div>
         <div id="quiz-content">
             <div class="question-count" id="question-count">Пытанне 1 з 15</div>
             <div class="question-text" id="question-text">Загрузка пытання...</div>
             <div class="options-container" id="options-container"></div>
             <button class="next-btn" id="next-btn" onclick="nextQuestion()">Далей →</button>
         </div>
-
-        <!-- Экран результатов -->
         <div class="result-screen" id="result-screen">
             <h2 data-be="Тэст скончаны!" data-ru="Тест окончен!">Тэст скончаны!</h2>
             <div class="score-display" id="score-display">0 / 15</div>
             <div class="feedback-text" id="feedback-text"></div>
-            
             <div class="review-section">
                 <h3 style="margin-bottom: 15px; color: var(--accent);" data-be="Разбор памылак" data-ru="Разбор ошибок">Разбор памылак</h3>
                 <div id="review-list"></div>
             </div>
-
             <button class="restart-btn" onclick="startQuiz()" data-be="Пачаць спачатку" data-ru="Начать сначала">Пачаць спачатку</button>
         </div>
     </div>
-
     <script>
-        // --- ПЕРЕМЕННЫЕ ---
         let currentLang = localStorage.getItem('siteLang') || 'be';
         let currentTheme = localStorage.getItem('siteTheme') || 'dark';
         let currentQuestionIndex = 0;
@@ -327,90 +236,24 @@
         let userAnswers = [];
         let shuffledQuestions = [];
 
-        // --- БАЗА ПЫТАННЯЎ (15 штук) ---
         const allQuestions = [
-            // Тип 1: Классические вопросы по сюжету
-            {
-                type: 'text',
-                be: { q: "У якім годзе адбываюцца асноўныя падзеі твора?", options: ["1941", "1944", "1982", "2024"], correct: 1 },
-                ru: { q: "В каком году происходят основные события произведения?", options: ["1941", "1944", "1982", "2024"], correct: 1 }
-            },
-            {
-                type: 'text',
-                be: { q: "Хто з'яўляецца аўтарам твора «Знак бяды»?", options: ["Уладзімір Караткевіч", "Васіль Быкаў", "Янка Купала", "Іван Мележ"], correct: 1 },
-                ru: { q: "Кто является автором произведения «Знак беды»?", options: ["Владимир Короткевич", "Василь Быков", "Янка Купала", "Иван Мележ"], correct: 1 }
-            },
-            {
-                type: 'text',
-                be: { q: "Дзе адбываюцца падзеі твора?", options: ["У Мінску", "У Заходняй Беларусі", "У Сібіры", "У Польшчы"], correct: 1 },
-                ru: { q: "Где происходят события произведения?", options: ["В Минске", "В Западной Беларуси", "В Сибири", "В Польше"], correct: 1 }
-            },
-            // Тип 2: Узнай персонажа по описанию
-            {
-                type: 'text',
-                be: { q: "Хто галоўны герой, які з'яўляецца сімвалам народнай мудрасці і сілы?", options: ["Мікалай Косця", "Пятро Ганчар", "Сысоев", "Іван Рыбак"], correct: 1 },
-                ru: { q: "Кто главный герой, являющийся символом народной мудрости и силы?", options: ["Николай Костя", "Петр Гончар", "Сысоев", "Иван Рыбак"], correct: 1 }
-            },
-            {
-                type: 'text',
-                be: { q: "Хто з'яўляецца галоўным антаганістам, былым паліцаем, які служыць немцам?", options: ["Сысоев", "Пятро Ганчар", "Мікалай Косця", "Іван Рыбак"], correct: 2 },
-                ru: { q: "Кто является главным антагонистом, бывшим полицаем, служащим немцам?", options: ["Сысоев", "Петр Гончар", "Николай Костя", "Иван Рыбак"], correct: 2 }
-            },
-            {
-                type: 'text',
-                be: { q: "Хто такая Сцепаніда?", options: ["Сястра Пятра", "Жонка Пятра", "Партызанка", "Дочка Косці"], correct: 1 },
-                ru: { q: "Кто такая Степанида?", options: ["Сестра Петра", "Жена Петра", "Партизанка", "Дочь Кости"], correct: 1 }
-            },
-            {
-                type: 'text',
-                be: { q: "Хто такі Сысоев?", options: ["Камісар партызанскага атрада", "Нямецкі афіцэр", "Сын Пятра", "Муж Сцепаніды"], correct: 0 },
-                ru: { q: "Кто такой Сысоев?", options: ["Комиссар партизанского отряда", "Немецкий офицер", "Сын Петра", "Муж Степаниды"], correct: 0 }
-            },
-            // Тип 3: Чья цитата?
-            {
-                type: 'text',
-                be: { q: "Каму належыць фраза: «Я не баюся нікога, акрамя свайго сумлення»?", options: ["Пятру Ганчару", "Мікалаю Косцю", "Сысоеву", "Сцепанідзе"], correct: 0 },
-                ru: { q: "Кому принадлежит фраза: «Я не боюсь никого, кроме своей совести»?", options: ["Петру Гончару", "Николаю Косте", "Сысоеву", "Степаниде"], correct: 0 }
-            },
-            {
-                type: 'text',
-                be: { q: "Каму належыць фраза: «Чалавек павінен быць чалавекам заўсёды»?", options: ["Мікалаю Косцю", "Пятру Ганчару", "Сысоеву", "Аўтару"], correct: 1 },
-                ru: { q: "Кому принадлежит фраза: «Человек должен быть человеком всегда»?", options: ["Николаю Косте", "Петру Гончару", "Сысоеву", "Автору"], correct: 1 }
-            },
-            {
-                type: 'text',
-                be: { q: "Хто сказаў: «Хто не з намі, той супраць нас»?", options: ["Сысоев", "Пятро Ганчар", "Мікалай Косця", "Сцепаніда"], correct: 0 },
-                ru: { q: "Кто сказал: «Кто не с нами, тот против нас»?", options: ["Сысоев", "Петр Гончар", "Николай Костя", "Степанида"], correct: 0 }
-            },
-            // Факты о произведении и символизм
-            {
-                type: 'text',
-                be: { q: "Што сімвалізуе назва твора?", options: ["Папярэджанне пра пажар", "Непазбежнасць трагедыі", "Прыкмету надвор'я", "Свята"], correct: 1 },
-                ru: { q: "Что символизирует название произведения?", options: ["Предупреждение о пожаре", "Неизбежность трагедии", "Примету погоды", "Праздник"], correct: 1 }
-            },
-            {
-                type: 'text',
-                be: { q: "Якая галоўная тэма твора?", options: ["Каханне і здрада", "Вайна і чалавечы выбар", "Прыгоды ў лесе", "Жыццё партызанаў"], correct: 1 },
-                ru: { q: "Какая главная тема произведения?", options: ["Любовь и предательство", "Война и человеческий выбор", "Приключения в лесу", "Жизнь партизан"], correct: 1 }
-            },
-            {
-                type: 'text',
-                be: { q: "Чым скончыўся твор?", options: ["Гераічнай перамогай", "Трагедыяй (гераічная смерць)", "Вяселлем", "Уцёкамі ў лес"], correct: 1 },
-                ru: { q: "Чем закончилось произведение?", options: ["Героической победой", "Трагедией (героическая смерть)", "Свадьбой", "Побегом в лес"], correct: 1 }
-            },
-            {
-                type: 'text',
-                be: { q: "Якое галоўнае пытанне ставіць Быкаў у творы?", options: ["Як разбагацець?", "Як захаваць чалавечнасць на вайне?", "Як уратаваць ураджай?", "Як знайсці каханне?"], correct: 1 },
-                ru: { q: "Какой главный вопрос ставит Быков в произведении?", options: ["Как разбогатеть?", "Как сохранить человечность на войне?", "Как спасти урожай?", "Как найти любовь?"], correct: 1 }
-            },
-            {
-                type: 'text',
-                be: { q: "Чаму творы Васіля Быкава лічацца трагічнымі?", options: ["Ён пісаў толькі пра смерць", "Ён паказваў вайну без прыкрас і ілюзій", "У іх заўсёды дрэнны канец", "Ён не любіў сваіх герояў"], correct: 1 },
-                ru: { q: "Почему произведения Василя Быкова считаются трагичными?", options: ["Он писал только о смерти", "Он показывал войну без прикрас и иллюзий", "В них всегда плохой конец", "Он не любил своих героев"], correct: 1 }
-            }
+            { type: 'text', be: { q: "У якім годзе адбываюцца асноўныя падзеі твора?", options: ["1941", "1944", "1982", "2024"], correct: 1 }, ru: { q: "В каком году происходят основные события произведения?", options: ["1941", "1944", "1982", "2024"], correct: 1 } },
+            { type: 'text', be: { q: "Хто з'яўляецца аўтарам твора «Знак бяды»?", options: ["Уладзімір Караткевіч", "Васіль Быкаў", "Янка Купала", "Іван Мележ"], correct: 1 }, ru: { q: "Кто является автором произведения «Знак беды»?", options: ["Владимир Короткевич", "Василь Быков", "Янка Купала", "Иван Мележ"], correct: 1 } },
+            { type: 'text', be: { q: "Дзе адбываюцца падзеі твора?", options: ["У Мінску", "У Заходняй Беларусі", "У Сібіры", "У Польшчы"], correct: 1 }, ru: { q: "Где происходят события произведения?", options: ["В Минске", "В Западной Беларуси", "В Сибири", "В Польше"], correct: 1 } },
+            { type: 'text', be: { q: "Хто галоўны герой, які з'яўляецца сімвалам народнай мудрасці і сілы?", options: ["Мікалай Косця", "Пятро Ганчар", "Сысоев", "Іван Рыбак"], correct: 1 }, ru: { q: "Кто главный герой, являющийся символом народной мудрости и силы?", options: ["Николай Костя", "Петр Гончар", "Сысоев", "Иван Рыбак"], correct: 1 } },
+            { type: 'text', be: { q: "Хто з'яўляецца галоўным антаганістам, былым паліцаем, які служыць немцам?", options: ["Сысоев", "Пятро Ганчар", "Мікалай Косця", "Іван Рыбак"], correct: 2 }, ru: { q: "Кто является главным антагонистом, бывшим полицаем, служащим немцам?", options: ["Сысоев", "Петр Гончар", "Николай Костя", "Иван Рыбак"], correct: 2 } },
+            { type: 'text', be: { q: "Хто такая Сцепаніда?", options: ["Сястра Пятра", "Жонка Пятра", "Партызанка", "Дочка Косці"], correct: 1 }, ru: { q: "Кто такая Степанида?", options: ["Сестра Петра", "Жена Петра", "Партизанка", "Дочь Кости"], correct: 1 } },
+            { type: 'text', be: { q: "Хто такі Сысоев?", options: ["Камісар партызанскага атрада", "Нямецкі афіцэр", "Сын Пятра", "Муж Сцепаніды"], correct: 0 }, ru: { q: "Кто такой Сысоев?", options: ["Комиссар партизанского отряда", "Немецкий офицер", "Сын Петра", "Муж Степаниды"], correct: 0 } },
+            { type: 'text', be: { q: "Каму належыць фраза: «Я не баюся нікога, акрамя свайго сумлення»?", options: ["Пятру Ганчару", "Мікалаю Косцю", "Сысоеву", "Сцепанідзе"], correct: 0 }, ru: { q: "Кому принадлежит фраза: «Я не боюсь никого, кроме своей совести»?", options: ["Петру Гончару", "Николаю Косте", "Сысоеву", "Степаниде"], correct: 0 } },
+            { type: 'text', be: { q: "Каму належыць фраза: «Чалавек павінен быць чалавекам заўсёды»?", options: ["Мікалаю Косцю", "Пятру Ганчару", "Сысоеву", "Аўтару"], correct: 1 }, ru: { q: "Кому принадлежит фраза: «Человек должен быть человеком всегда»?", options: ["Николаю Косте", "Петру Гончару", "Сысоеву", "Автору"], correct: 1 } },
+            { type: 'text', be: { q: "Хто сказаў: «Хто не з намі, той супраць нас»?", options: ["Сысоев", "Пятро Ганчар", "Мікалай Косця", "Сцепаніда"], correct: 0 }, ru: { q: "Кто сказал: «Кто не с нами, тот против нас»?", options: ["Сысоев", "Петр Гончар", "Николай Костя", "Степанида"], correct: 0 } },
+            { type: 'text', be: { q: "Што сімвалізуе назва твора?", options: ["Папярэджанне пра пажар", "Непазбежнасць трагедыі", "Прыкмету надвор'я", "Свята"], correct: 1 }, ru: { q: "Что символизирует название произведения?", options: ["Предупреждение о пожаре", "Неизбежность трагедии", "Примету погоды", "Праздник"], correct: 1 } },
+            { type: 'text', be: { q: "Якая галоўная тэма твора?", options: ["Каханне і здрада", "Вайна і чалавечы выбар", "Прыгоды ў лесе", "Жыццё партызанаў"], correct: 1 }, ru: { q: "Какая главная тема произведения?", options: ["Любовь и предательство", "Война и человеческий выбор", "Приключения в лесу", "Жизнь партизан"], correct: 1 } },
+            { type: 'text', be: { q: "Чым скончыўся твор?", options: ["Гераічнай перамогай", "Трагедыяй (гераічная смерць)", "Вяселлем", "Уцёкамі ў лес"], correct: 1 }, ru: { q: "Чем закончилось произведение?", options: ["Героической победой", "Трагедией (героическая смерть)", "Свадьбой", "Побегом в лес"], correct: 1 } },
+            { type: 'text', be: { q: "Якое галоўнае пытанне ставіць Быкаў у творы?", options: ["Як разбагацець?", "Як захаваць чалавечнасць на вайне?", "Як уратаваць ураджай?", "Як знайсці каханне?"], correct: 1 }, ru: { q: "Какой главный вопрос ставит Быков в произведении?", options: ["Как разбогатеть?", "Как сохранить человечность на войне?", "Как спасти урожай?", "Как найти любовь?"], correct: 1 } },
+            { type: 'text', be: { q: "Чаму творы Васіля Быкава лічацца трагічнымі?", options: ["Ён пісаў толькі пра смерць", "Ён паказваў вайну без прыкрас і ілюзій", "У іх заўсёды дрэнны канец", "Ён не любіў сваіх герояў"], correct: 1 }, ru: { q: "Почему произведения Василя Быкова считаются трагичными?", options: ["Он писал только о смерти", "Он показывал войну без прикрас и иллюзий", "В них всегда плохой конец", "Он не любил своих героев"], correct: 1 } }
         ];
 
-        // --- ИНИЦИАЛИЗАЦИЯ ТЕМЫ И ЯЗЫКА ---
         function applyTheme() {
             if (currentTheme === 'light') document.body.classList.add('light-theme');
             else document.body.classList.remove('light-theme');
@@ -426,19 +269,14 @@
                      el.innerHTML = el.getAttribute(`data-${currentLang}`);
                 }
             });
-            if(shuffledQuestions.length > 0 && currentQuestionIndex < 15) {
-                renderQuestion();
-            } else if (currentQuestionIndex >= 15) {
-                 showResults();
-            }
+            if(shuffledQuestions.length > 0 && currentQuestionIndex < 15) { renderQuestion(); }
+            else if (currentQuestionIndex >= 15) { showResults(); }
         }
         function toggleLang() {
             currentLang = currentLang === 'be' ? 'ru' : 'be';
             localStorage.setItem('siteLang', currentLang);
             updateLangUI();
         }
-
-        // --- ЛОГИКА ТЕСТА ---
 
         function shuffle(array) {
             let currentIndex = array.length, randomIndex;
@@ -451,14 +289,20 @@
         }
 
         function startQuiz() {
+            // 1. Перемешиваем вопросы
             shuffledQuestions = shuffle([...allQuestions]);
             
+            // 2. Перемешиваем ответы и четко запоминаем НОВЫЙ индекс правильного ответа
             shuffledQuestions = shuffledQuestions.map(q => {
                 let langData = q[currentLang];
+                // Создаем массив объектов {text, isCorrect}
                 let optionsWithIndex = langData.options.map((opt, index) => ({ text: opt, isCorrect: index === langData.correct }));
+                // Перемешиваем
                 shuffle(optionsWithIndex);
                 
+                // Находим новый индекс правильного ответа
                 let newCorrectIndex = optionsWithIndex.findIndex(o => o.isCorrect);
+                
                 return {
                     ...q,
                     shuffledOptions: optionsWithIndex.map(o => o.text),
@@ -469,10 +313,8 @@
             currentQuestionIndex = 0;
             score = 0;
             userAnswers = [];
-            
             document.getElementById('result-screen').style.display = 'none';
             document.getElementById('quiz-content').style.display = 'block';
-            
             renderQuestion();
         }
 
@@ -491,18 +333,17 @@
                 const btn = document.createElement('button');
                 btn.className = 'option-btn';
                 btn.innerText = optText;
-                btn.onclick = () => selectAnswer(index, btn);
+                btn.onclick = () => selectAnswer(index, btn); // передаем текущий индекс кнопки
                 optionsContainer.appendChild(btn);
             });
-
             document.getElementById('next-btn').style.display = 'none';
         }
 
         function selectAnswer(selectedIndex, btnElement) {
             const q = shuffledQuestions[currentQuestionIndex];
-            const correctIndex = q.newCorrect;
-            const allButtons = document.querySelectorAll('.option-btn');
+            const correctIndex = q.newCorrect; // Берем сохраненный правильный индекс
             
+            const allButtons = document.querySelectorAll('.option-btn');
             allButtons.forEach(b => b.disabled = true);
             
             userAnswers.push({
@@ -515,26 +356,21 @@
                 score++;
             } else {
                 btnElement.classList.add('wrong');
-                allButtons[correctIndex].classList.add('correct');
+                allButtons[correctIndex].classList.add('correct'); // Подсвечиваем правильный
             }
-
             document.getElementById('next-btn').style.display = 'block';
         }
 
         function nextQuestion() {
             currentQuestionIndex++;
-            if (currentQuestionIndex < 15) {
-                renderQuestion();
-            } else {
-                showResults();
-            }
+            if (currentQuestionIndex < 15) { renderQuestion(); }
+            else { showResults(); }
         }
 
         function showResults() {
             document.getElementById('quiz-content').style.display = 'none';
             document.getElementById('result-screen').style.display = 'block';
             document.getElementById('progress-bar').style.width = '100%';
-
             document.getElementById('score-display').innerText = `${score} / 15`;
 
             let feedback = "";
@@ -558,10 +394,7 @@
             userAnswers.forEach((ans, i) => {
                 const div = document.createElement('div');
                 div.className = 'review-item';
-                div.innerHTML = `
-                    <div class="review-q">${i + 1}. ${ans.q}</div>
-                    <div class="review-a">✔️ ${ans.correct}</div>
-                `;
+                div.innerHTML = `<div class="review-q">${i + 1}. ${ans.q}</div><div class="review-a">✔️ ${ans.correct}</div>`;
                 reviewList.appendChild(div);
             });
         }
